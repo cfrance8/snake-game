@@ -140,6 +140,9 @@ canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca
 
 <!-- Options -->
 <div id="options">
+  <div class="opt-group"><label>Board</label>
+    <select id="boardSel"><option value="small" selected>Small 20×20</option><option value="medium">Medium 30×30</option><option value="large">Large 40×40</option></select>
+  </div>
   <div class="opt-group"><label>Difficulty</label>
     <select id="diffSel"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="insane">Insane</option></select>
   </div>
@@ -283,7 +286,22 @@ function playBeep()  { playTone(660,'sine',.1,.4); }
 // ══════════════════════════════════════════════════
 // CONSTANTS
 // ══════════════════════════════════════════════════
-const TILE=20, COLS=20, ROWS=20;
+const BOARD_SIZES={small:{cols:20,rows:20},medium:{cols:30,rows:30},large:{cols:40,rows:40}};
+let COLS=20,ROWS=20;
+
+function applyBoardSize(size){
+  const bs=BOARD_SIZES[size]||BOARD_SIZES.small;
+  COLS=bs.cols; ROWS=bs.rows;
+  canvas.width=COLS*TILE; canvas.height=ROWS*TILE;
+  fitCanvas();
+}
+function fitCanvas(){
+  const maxPx=Math.min(window.innerWidth-32,640);
+  const nat=COLS*TILE, scale=Math.min(1,maxPx/nat);
+  canvas.style.width=Math.round(nat*scale)+'px';
+  canvas.style.height=Math.round(nat*scale)+'px';
+}
+window.addEventListener('resize',fitCanvas);
 const NUM_FOODS=5, AMMO_START=3, SHOOT_COOLDOWN=1500, MIN_LEN=5, SHOOT_COST=1, BULLET_SPEED=2;
 const FOOD_COLORS=['#f5a623','#ff69b4','#4fc3f7','#81c784','#ffeb3b'];
 const PLAYER_COLORS=['#4ecca3','#e94560','#f5a623','#a78bfa'];
@@ -312,6 +330,7 @@ makeToggle('wallsBtn',true, v=>{ wallsOn=v; olSyncSettings(); });
 makeToggle('obstBtn',false, v=>{ obstOn=v; olSyncSettings(); });
 makeToggle('bounceBtn',false,v=>{ bounceOn=v; olSyncSettings(); });
 makeToggle('soundBtn',true, v=>soundOn=v);
+document.getElementById('boardSel').addEventListener('change',function(){ applyBoardSize(this.value); olSyncSettings(); });
 document.getElementById('diffSel').addEventListener('change',()=>olSyncSettings());
 
 // ══════════════════════════════════════════════════
@@ -461,6 +480,7 @@ function stepBullets(allSnakes){
 // ══════════════════════════════════════════════════
 function init(){
   if(mode==='online') return;
+  applyBoardSize(document.getElementById('boardSel').value);
   hideOverlay(); running=true; clearInterval(gameLoop);
   document.getElementById('msg').textContent='';
   foods=[]; obstacles=[]; bullets=[];
@@ -567,10 +587,10 @@ function updateUI2p(){
 // DRAW
 // ══════════════════════════════════════════════════
 function draw(){
-  ctx.clearRect(0,0,400,400);
+  ctx.clearRect(0,0,COLS*TILE,ROWS*TILE);
   ctx.strokeStyle='rgba(255,255,255,0.04)';
-  for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*TILE,0);ctx.lineTo(i*TILE,400);ctx.stroke();}
-  for(let j=0;j<=ROWS;j++){ctx.beginPath();ctx.moveTo(0,j*TILE);ctx.lineTo(400,j*TILE);ctx.stroke();}
+  for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*TILE,0);ctx.lineTo(i*TILE,ROWS*TILE);ctx.stroke();}
+  for(let j=0;j<=ROWS;j++){ctx.beginPath();ctx.moveTo(0,j*TILE);ctx.lineTo(COLS*TILE,j*TILE);ctx.stroke();}
 
   // Obstacles
   const obs=mode==='online'?olObstacles:obstacles;
@@ -624,7 +644,7 @@ function draw(){
 
   // Wrap border
   const wo=mode==='online'?(olSettings?.wallsOn??wallsOn):wallsOn;
-  if(!wo){ ctx.strokeStyle=`rgba(78,204,163,${0.2+0.1*Math.sin(Date.now()/300)})`; ctx.lineWidth=4; ctx.strokeRect(2,2,396,396); ctx.lineWidth=1; }
+  if(!wo){ ctx.strokeStyle=`rgba(78,204,163,${0.2+0.1*Math.sin(Date.now()/300)})`; ctx.lineWidth=4; ctx.strokeRect(2,2,COLS*TILE-4,ROWS*TILE-4); ctx.lineWidth=1; }
 }
 
 function drawSnake(body,d,color,bodyFn){
@@ -732,7 +752,7 @@ function olShoot(){ if(!running)return; olSend({type:'shoot'}); }
 
 function olSyncSettings(){
   if(mode!=='online'||!olWs||olPlayerNum!==1||!olSettings||olSettings._gameRunning) return;
-  olSend({type:'settings_update',boardSize:'small',wallsOn,obstOn,bounceOn,diff:document.getElementById('diffSel').value});
+  olSend({type:'settings_update',boardSize:document.getElementById('boardSel').value,wallsOn,obstOn,bounceOn,diff:document.getElementById('diffSel').value});
 }
 
 function applySettingsFromServer(s){
