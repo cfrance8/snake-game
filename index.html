@@ -11,63 +11,96 @@ body {
   align-items:center; justify-content:center; min-height:100vh;
   font-family:'Segoe UI',sans-serif; color:#eee; padding:10px;
 }
-h1 { font-size:1.8rem; margin-bottom:4px; color:#4ecca3; letter-spacing:3px; }
-#subtitle { font-size:.75rem; color:#a78bfa; margin-bottom:6px; letter-spacing:2px; }
+h1 { font-size:1.8rem; margin-bottom:3px; color:#4ecca3; letter-spacing:3px; }
+#subtitle { font-size:.72rem; color:#a78bfa; margin-bottom:6px; letter-spacing:2px; }
 
 #modeBar { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
-.mode-btn { padding:6px 16px; border-radius:20px; border:2px solid #4ecca3; background:transparent; color:#4ecca3; font-size:.85rem; cursor:pointer; transition:.15s; }
+.mode-btn { padding:6px 14px; border-radius:20px; border:2px solid #4ecca3; background:transparent; color:#4ecca3; font-size:.82rem; cursor:pointer; transition:.15s; }
 .mode-btn.active { background:#4ecca3; color:#1a1a2e; font-weight:bold; }
+.mode-btn.online-btn { border-color:#a78bfa; color:#a78bfa; }
+.mode-btn.online-btn.active { background:#a78bfa; color:#1a1a2e; }
 
-#sb1p { display:flex; gap:20px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
+/* Scoreboards */
+#sb1p { display:flex; gap:18px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
 .score-box { text-align:center; }
-.score-box span { display:block; font-size:1.3rem; font-weight:bold; color:#4ecca3; }
+.score-box span { display:block; font-size:1.2rem; font-weight:bold; color:#4ecca3; }
 .ammo-box span { color:#f5a623; }
 .cool-box span { color:#a78bfa; }
 
-#sb2p { display:flex; align-items:center; gap:0; margin-bottom:8px; width:420px; max-width:98vw; }
-.p-score { flex:1; padding:5px 8px; border-radius:6px; font-size:.8rem; text-align:center; }
+#sb2p { display:flex; align-items:center; margin-bottom:8px; width:min(420px,98vw); }
+.p-score { flex:1; padding:5px 8px; font-size:.8rem; text-align:center; }
 .p1-side { background:#1e3a5f; border:2px solid #4ecca3; border-radius:6px 0 0 6px; }
 .p2-side { background:#3a1e2e; border:2px solid #e94560; border-radius:0 6px 6px 0; }
-.p-score .name { font-weight:bold; font-size:.9rem; }
+.p-score .name { font-weight:bold; font-size:.88rem; }
 .p1-side .name { color:#4ecca3; } .p2-side .name { color:#e94560; }
-.p-score .pts { font-size:1.3rem; font-weight:bold; }
-.p-ammo { font-size:.75rem; color:#f5a623; }
-.vs-badge { background:#16213e; border:2px solid #555; padding:4px 8px; font-weight:bold; color:#aaa; font-size:.9rem; }
+.p-score .pts { font-size:1.2rem; font-weight:bold; }
+.p-ammo { font-size:.72rem; color:#f5a623; }
+.vs-badge { background:#16213e; border:2px solid #555; padding:4px 8px; font-weight:bold; color:#aaa; font-size:.88rem; }
 
+#sb-online { display:none; flex-wrap:wrap; gap:6px; margin-bottom:8px; justify-content:center; }
+.ol-score-badge { padding:5px 10px; border-radius:8px; text-align:center; min-width:60px; }
+.ol-score-badge .pts { font-size:1.1rem; font-weight:bold; }
+
+/* Options */
 #options { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
-.opt-group { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:.78rem; color:#aaa; }
-.opt-group label { font-size:.72rem; color:#4ecca3; text-transform:uppercase; letter-spacing:1px; }
-select, .toggle-btn { background:#16213e; border:2px solid #4ecca3; color:#eee; border-radius:6px; padding:3px 7px; font-size:.82rem; cursor:pointer; }
-.toggle-btn { padding:3px 10px; transition:.15s; min-width:55px; text-align:center; }
+.opt-group { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.opt-group label { font-size:.68rem; color:#4ecca3; text-transform:uppercase; letter-spacing:1px; }
+select, .toggle-btn { background:#16213e; border:2px solid #4ecca3; color:#eee; border-radius:6px; padding:3px 7px; font-size:.8rem; cursor:pointer; }
+.toggle-btn { padding:3px 10px; transition:.15s; min-width:52px; text-align:center; }
 .toggle-btn.on { background:#4ecca3; color:#1a1a2e; font-weight:bold; }
 
+/* Online panel */
+#onlinePanel { width:min(400px,96vw); margin-bottom:8px; background:#16213e; border:2px solid #a78bfa; border-radius:10px; padding:10px 12px; display:none; flex-direction:column; gap:7px; align-items:center; }
+.ol-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; width:100%; }
+.ol-divider { color:#555; font-size:.75rem; }
+.ol-action-btn { padding:6px 14px; border-radius:8px; border:2px solid #a78bfa; background:transparent; color:#a78bfa; font-size:.82rem; cursor:pointer; transition:.15s; }
+.ol-action-btn:hover { background:#a78bfa22; }
+.ol-action-btn.primary { background:#a78bfa; color:#1a1a2e; font-weight:bold; }
+.ol-action-btn.primary:hover { opacity:.85; }
+.ol-action-btn.danger { border-color:#e94560; color:#e94560; }
+.ol-action-btn.danger:hover { background:#e9456022; }
+.ol-action-btn:disabled { opacity:.4; cursor:default; }
+#ol-code-in { background:#0f1929; border:2px solid #a78bfa; color:#eee; border-radius:6px; padding:4px 8px; font-size:.95rem; font-weight:bold; width:100px; letter-spacing:3px; text-transform:uppercase; text-align:center; }
+#ol-code-in::placeholder { letter-spacing:1px; font-size:.75rem; font-weight:normal; }
+#ol-code-display { font-size:1.7rem; font-weight:bold; letter-spacing:8px; color:#a78bfa; }
+#ol-dots { display:flex; gap:5px; font-size:1.3rem; }
+#ol-connected-text { color:#aaa; font-size:.8rem; }
+#ol-status-text { color:#aaa; font-size:.82rem; text-align:center; }
+#ol-countdown { font-size:2.8rem; font-weight:bold; color:#f5a623; animation:pulse-c .9s ease-in-out infinite; }
+@keyframes pulse-c { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+#ol-error { color:#e94560; font-size:.78rem; text-align:center; }
+.ol-badge { font-size:.75rem; padding:3px 9px; border-radius:12px; background:#0f1929; border:1px solid #a78bfa55; color:#a78bfa; }
+.ol-you { border-color:#4ecca355; color:#4ecca3; }
+
+/* Canvas */
 #canvas-wrap { position:relative; }
 canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca355; background:#0f3460; display:block; }
 #overlay { position:absolute; inset:0; background:rgba(15,52,96,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:4px; gap:8px; pointer-events:none; }
 #overlay h2 { color:#4ecca3; font-size:1.4rem; letter-spacing:2px; }
-#overlay p { color:#f5a623; font-size:.9rem; text-align:center; padding:0 16px; }
-#overlay .sub { color:#aaa; font-size:.78rem; }
+#overlay p { color:#f5a623; font-size:.88rem; text-align:center; padding:0 14px; }
+#overlay .sub { color:#aaa; font-size:.76rem; }
 #msg { margin-top:6px; font-size:.88rem; color:#f5a623; min-height:1.3em; text-align:center; max-width:min(420px,96vw); }
 
 /* Controls */
-#ctrl-wrap { margin-top:8px; display:flex; gap:16px; align-items:flex-start; justify-content:center; flex-wrap:wrap; }
+#ctrl-wrap { margin-top:8px; display:flex; gap:14px; align-items:flex-start; justify-content:center; flex-wrap:wrap; }
 .ctrl-section { display:flex; flex-direction:column; align-items:center; gap:4px; }
-.ctrl-section .clabel { font-size:.7rem; color:#aaa; }
+.clabel { font-size:.68rem; color:#aaa; }
 .ctrl-grid { display:grid; grid-template-columns:repeat(3,40px); grid-template-rows:repeat(2,40px); gap:4px; }
 .ctrl-btn { background:#16213e; border:2px solid #4ecca3; border-radius:8px; color:#4ecca3; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; user-select:none; transition:.1s; }
 .ctrl-btn.p2 { border-color:#e94560; color:#e94560; }
-.ctrl-btn.shoot { border-color:#f5a623; color:#f5a623; width:88px; height:36px; font-size:.8rem; font-weight:bold; border-radius:8px; }
-.ctrl-btn.shoot.p2s { border-color:#e94560; color:#e94560; }
-.ctrl-btn:active { background:#4ecca3; color:#1a1a2e; }
+.ctrl-btn.ol { border-color:#a78bfa; color:#a78bfa; }
+.shoot-btn { width:128px; height:34px; font-size:.78rem; font-weight:bold; border-radius:8px; margin-top:3px; }
+.ctrl-btn:active,.ctrl-btn.shoot-btn:active { background:#4ecca3; color:#1a1a2e; }
 .ctrl-btn.p2:active { background:#e94560; color:#fff; }
-.ctrl-btn.shoot:active { background:#f5a623; color:#1a1a2e; }
-.ctrl-btn.shoot.p2s:active { background:#e94560; color:#fff; }
-#cbu {grid-column:2;grid-row:1} #cbl {grid-column:1;grid-row:2} #cbd {grid-column:2;grid-row:2} #cbr {grid-column:3;grid-row:2}
-#cb2u{grid-column:2;grid-row:1} #cb2l{grid-column:1;grid-row:2} #cb2d{grid-column:2;grid-row:2} #cb2r{grid-column:3;grid-row:2}
+.ctrl-btn.ol:active { background:#a78bfa; color:#1a1a2e; }
+#g1u{grid-column:2;grid-row:1}#g1l{grid-column:1;grid-row:2}#g1d{grid-column:2;grid-row:2}#g1r{grid-column:3;grid-row:2}
+#g2u{grid-column:2;grid-row:1}#g2l{grid-column:1;grid-row:2}#g2d{grid-column:2;grid-row:2}#g2r{grid-column:3;grid-row:2}
+#g3u{grid-column:2;grid-row:1}#g3l{grid-column:1;grid-row:2}#g3d{grid-column:2;grid-row:2}#g3r{grid-column:3;grid-row:2}
+#g4u{grid-column:2;grid-row:1}#g4l{grid-column:1;grid-row:2}#g4d{grid-column:2;grid-row:2}#g4r{grid-column:3;grid-row:2}
 
-#startBtn { margin-top:8px; padding:8px 26px; background:#4ecca3; color:#1a1a2e; border:none; border-radius:8px; font-size:.95rem; font-weight:bold; cursor:pointer; letter-spacing:1px; transition:opacity .2s; }
+#startBtn { margin-top:8px; padding:8px 24px; background:#4ecca3; color:#1a1a2e; border:none; border-radius:8px; font-size:.92rem; font-weight:bold; cursor:pointer; letter-spacing:1px; transition:opacity .2s; }
 #startBtn:hover { opacity:.85; }
-#hint { font-size:.7rem; color:#666; margin-top:4px; text-align:center; }
+#hint { font-size:.67rem; color:#555; margin-top:4px; text-align:center; line-height:1.7; }
 </style>
 </head>
 <body>
@@ -77,6 +110,7 @@ canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca
 <div id="modeBar">
   <button class="mode-btn active" id="btn1p">1 Player</button>
   <button class="mode-btn" id="btn2p-mode">1v1 Local</button>
+  <button class="mode-btn online-btn" id="btn-online">🌐 Online</button>
 </div>
 
 <!-- 1P HUD -->
@@ -92,16 +126,19 @@ canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca
   <div class="p-score p1-side">
     <div class="name">🟢 P1</div>
     <div class="pts" id="p1wins">0</div>
-    <div class="p-ammo">🔫 <span id="p1ammo">3</span> ammo</div>
+    <div class="p-ammo">🔫 <span id="p1ammo">3</span></div>
   </div>
   <div class="vs-badge">VS</div>
   <div class="p-score p2-side">
     <div class="name">P2 🔴</div>
     <div class="pts" id="p2wins">0</div>
-    <div class="p-ammo">🔫 <span id="p2ammo">3</span> ammo</div>
+    <div class="p-ammo">🔫 <span id="p2ammo">3</span></div>
   </div>
 </div>
+<!-- Online HUD -->
+<div id="sb-online"></div>
 
+<!-- Options -->
 <div id="options">
   <div class="opt-group"><label>Difficulty</label>
     <select id="diffSel"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="insane">Insane</option></select>
@@ -112,11 +149,48 @@ canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca
   <div class="opt-group"><label>Sound</label><button class="toggle-btn on" id="soundBtn">ON</button></div>
 </div>
 
+<!-- Online Panel -->
+<div id="onlinePanel">
+  <div id="ol-setup">
+    <div class="ol-row">
+      <div class="opt-group" style="margin:0"><label>Players</label>
+        <select id="ol-max-players" style="border-color:#a78bfa"><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
+      </div>
+      <button class="ol-action-btn primary" id="ol-create-btn">Create Room</button>
+    </div>
+    <div class="ol-divider">— or join with a code —</div>
+    <div class="ol-row">
+      <input id="ol-code-in" maxlength="4" placeholder="Room code">
+      <button class="ol-action-btn" id="ol-join-btn">Join Room</button>
+    </div>
+    <div id="ol-error"></div>
+  </div>
+  <div id="ol-waiting" style="display:none;flex-direction:column;align-items:center;gap:6px;width:100%">
+    <div style="color:#aaa;font-size:.75rem">Share this code:</div>
+    <div id="ol-code-display"></div>
+    <div style="display:flex;gap:8px;align-items:center"><div id="ol-dots"></div><div id="ol-connected-text"></div></div>
+    <div id="ol-status-text"></div>
+    <div id="ol-countdown" style="display:none"></div>
+    <div class="ol-row">
+      <button class="ol-action-btn primary" id="ol-start-btn" style="display:none">▶ Start Now</button>
+      <button class="ol-action-btn danger" id="ol-cancel-btn">Cancel</button>
+    </div>
+  </div>
+  <div id="ol-ingame" style="display:none;flex-direction:column;align-items:center;gap:5px;width:100%">
+    <div class="ol-row" style="justify-content:space-between">
+      <span class="ol-badge">Room: <strong id="ol-code-ingame"></strong></span>
+      <span class="ol-badge ol-you" id="ol-player-label"></span>
+      <button class="ol-action-btn danger" id="ol-leave-btn" style="padding:2px 9px;font-size:.75rem">Leave</button>
+    </div>
+    <button class="ol-action-btn primary" id="ol-rematch-btn" style="display:none">🔄 Rematch</button>
+  </div>
+</div>
+
 <div id="canvas-wrap">
   <canvas id="c" width="400" height="400"></canvas>
   <div id="overlay">
     <h2 id="ov-title">🐍 SNAKE SHOOTER</h2>
-    <p id="ov-msg">Eat food to gain ammo • Shoot to chop enemies</p>
+    <p id="ov-msg">Eat food for ammo • Shoot to chop!</p>
     <p class="sub" id="ov-sub">Press Start or Space to play</p>
   </div>
 </div>
@@ -125,44 +199,58 @@ canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca
 <div id="ctrl-wrap">
   <!-- 1P -->
   <div id="ctrl1p" class="ctrl-section">
-    <div class="clabel">Move</div>
+    <div class="clabel">1P Controls</div>
     <div class="ctrl-grid">
-      <button class="ctrl-btn" id="cbu">▲</button>
-      <button class="ctrl-btn" id="cbl">◀</button>
-      <button class="ctrl-btn" id="cbd">▼</button>
-      <button class="ctrl-btn" id="cbr">▶</button>
+      <button class="ctrl-btn" id="g1u">▲</button>
+      <button class="ctrl-btn" id="g1l">◀</button>
+      <button class="ctrl-btn" id="g1d">▼</button>
+      <button class="ctrl-btn" id="g1r">▶</button>
     </div>
-    <button class="ctrl-btn shoot" id="cbshoot">🔫 SHOOT</button>
+    <button class="ctrl-btn shoot-btn" id="g1shoot">🔫 SHOOT</button>
   </div>
   <!-- 2P -->
-  <div id="ctrl2p" style="display:none; gap:24px;" class="ctrl-section">
-    <div style="display:flex;gap:16px">
+  <div id="ctrl2p" style="display:none" class="ctrl-section">
+    <div style="display:flex;gap:14px">
       <div class="ctrl-section">
         <div class="clabel" style="color:#4ecca3">🟢 P1 (WASD+F)</div>
         <div class="ctrl-grid">
-          <button class="ctrl-btn" id="cb2u">▲</button>
-          <button class="ctrl-btn" id="cb2l">◀</button>
-          <button class="ctrl-btn" id="cb2d">▼</button>
-          <button class="ctrl-btn" id="cb2r">▶</button>
+          <button class="ctrl-btn" id="g2u">▲</button>
+          <button class="ctrl-btn" id="g2l">◀</button>
+          <button class="ctrl-btn" id="g2d">▼</button>
+          <button class="ctrl-btn" id="g2r">▶</button>
         </div>
-        <button class="ctrl-btn shoot" id="cb2shoot">🔫 SHOOT</button>
+        <button class="ctrl-btn shoot-btn" id="g2shoot">🔫 SHOOT</button>
       </div>
       <div class="ctrl-section">
         <div class="clabel" style="color:#e94560">P2 🔴 (Arrows+/)</div>
         <div class="ctrl-grid">
-          <button class="ctrl-btn p2" id="cb3u">▲</button>
-          <button class="ctrl-btn p2" id="cb3l">◀</button>
-          <button class="ctrl-btn p2" id="cb3d">▼</button>
-          <button class="ctrl-btn p2" id="cb3r">▶</button>
+          <button class="ctrl-btn p2" id="g3u">▲</button>
+          <button class="ctrl-btn p2" id="g3l">◀</button>
+          <button class="ctrl-btn p2" id="g3d">▼</button>
+          <button class="ctrl-btn p2" id="g3r">▶</button>
         </div>
-        <button class="ctrl-btn shoot p2s" id="cb3shoot">🔫 SHOOT</button>
+        <button class="ctrl-btn p2 shoot-btn" id="g3shoot">🔫 SHOOT</button>
       </div>
     </div>
+  </div>
+  <!-- Online -->
+  <div id="ctrl-online" style="display:none" class="ctrl-section">
+    <div class="clabel" id="ol-dpad-label" style="color:#a78bfa">Your Controls</div>
+    <div class="ctrl-grid">
+      <button class="ctrl-btn ol" id="g4u">▲</button>
+      <button class="ctrl-btn ol" id="g4l">◀</button>
+      <button class="ctrl-btn ol" id="g4d">▼</button>
+      <button class="ctrl-btn ol" id="g4r">▶</button>
+    </div>
+    <button class="ctrl-btn ol shoot-btn" id="g4shoot">🔫 SHOOT (F/Space)</button>
   </div>
 </div>
 
 <button id="startBtn">START</button>
-<div id="hint">1P: Arrow keys / WASD to move • Space or F to shoot<br>2P: P1=WASD+F • P2=Arrows+/</div>
+<div id="hint">
+  1P: Arrows/WASD = move &nbsp;|&nbsp; Space/F = shoot<br>
+  2P: P1=WASD+F &nbsp;|&nbsp; P2=Arrows+/ &nbsp;|&nbsp; Mobile: swipe + double-tap
+</div>
 
 <script>
 // ══════════════════════════════════════════════════
@@ -182,237 +270,213 @@ function playTone(freq,type,dur,vol=0.3){
     o.start(); o.stop(a.currentTime+dur);
   }catch(e){}
 }
-function playEat()  { playTone(523,'sine',.08); setTimeout(()=>playTone(659,'sine',.1),60); }
-function playDie()  { playTone(200,'sawtooth',.08);setTimeout(()=>playTone(150,'sawtooth',.15),80);setTimeout(()=>playTone(100,'sawtooth',.3),200); }
-function playShoot(){ playTone(880,'square',.04,.25); setTimeout(()=>playTone(440,'square',.04,.15),40); }
-function playHit()  { playTone(300,'sawtooth',.05,.4); setTimeout(()=>playTone(200,'sawtooth',.08,.3),50); }
+function playEat()   { playTone(523,'sine',.08); setTimeout(()=>playTone(659,'sine',.1),60); }
+function playDie()   { playTone(200,'sawtooth',.08);setTimeout(()=>playTone(150,'sawtooth',.15),80);setTimeout(()=>playTone(100,'sawtooth',.3),200); }
+function playShoot() { playTone(880,'square',.04,.25);setTimeout(()=>playTone(440,'square',.04,.15),40); }
+function playHit()   { playTone(300,'sawtooth',.05,.4);setTimeout(()=>playTone(200,'sawtooth',.08,.3),50); }
 function playBounce(){ playTone(600,'sine',.06,.2); }
 function playNoAmmo(){ playTone(150,'square',.05,.2); }
-function playWin()  { [659,784,880,1047].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.2),i*100)); }
-function playLevel(){ [523,587,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.15),i*80)); }
+function playWin()   { [659,784,880,1047].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.2),i*100)); }
+function playLevel() { [523,587,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.15),i*80)); }
+function playBeep()  { playTone(660,'sine',.1,.4); }
 
 // ══════════════════════════════════════════════════
-// CONSTANTS & STATE
+// CONSTANTS
 // ══════════════════════════════════════════════════
 const TILE=20, COLS=20, ROWS=20;
-const NUM_FOODS = 5;
-const AMMO_START = 3;
-const SHOOT_COOLDOWN = 1500; // ms
-const MIN_LENGTH_TO_SHOOT = 5;
-const SHOOT_COST = 1; // segments lost per shot
-const BULLET_SPEED = 2; // tiles per game tick
-const FOOD_COLORS = ['#f5a623','#ff69b4','#4fc3f7','#81c784','#ffeb3b'];
-
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-
-let wallsOn=true, obstOn=false, bounceOn=false, soundOn=true, mode='1p';
-let running=false, gameLoop=null;
-
+const NUM_FOODS=5, AMMO_START=3, SHOOT_COOLDOWN=1500, MIN_LEN=5, SHOOT_COST=1, BULLET_SPEED=2;
+const FOOD_COLORS=['#f5a623','#ff69b4','#4fc3f7','#81c784','#ffeb3b'];
+const PLAYER_COLORS=['#4ecca3','#e94560','#f5a623','#a78bfa'];
+const PLAYER_BODY_FN=[
+  r=>`hsl(${160-r*40},70%,${55-r*15}%)`,
+  r=>`hsl(${345+r*20},${70-r*20}%,${50-r*15}%)`,
+  r=>`hsl(${35-r*15},${80-r*20}%,${55-r*15}%)`,
+  r=>`hsl(${270+r*20},${60-r*20}%,${55-r*15}%)`,
+];
 const DIFF={easy:{base:220,dec:8},medium:{base:180,dec:12},hard:{base:120,dec:15},insane:{base:70,dec:20}};
-function getDiff(){ return DIFF[document.getElementById('diffSel').value]; }
-function getSpeed(sc=0){ const d=getDiff(),lvl=Math.floor(sc/5); return Math.max(60,d.base-lvl*d.dec); }
 
-// ── Toggles ──────────────────────────────────────
+const canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
+
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+let wallsOn=true, obstOn=false, bounceOn=false, soundOn=true, mode='1p';
+
 function makeToggle(id,init,cb){
   let v=init; const b=document.getElementById(id);
   b.classList.toggle('on',v); b.textContent=v?'ON':'OFF';
   b.addEventListener('click',()=>{ v=!v; b.classList.toggle('on',v); b.textContent=v?'ON':'OFF'; cb(v); });
 }
-makeToggle('wallsBtn',true,v=>wallsOn=v);
-makeToggle('obstBtn',false,v=>obstOn=v);
-makeToggle('bounceBtn',false,v=>bounceOn=v);
-makeToggle('soundBtn',true,v=>soundOn=v);
+function setToggleUI(id,val){ const b=document.getElementById(id); b.classList.toggle('on',val); b.textContent=val?'ON':'OFF'; }
+makeToggle('wallsBtn',true, v=>{ wallsOn=v; olSyncSettings(); });
+makeToggle('obstBtn',false, v=>{ obstOn=v; olSyncSettings(); });
+makeToggle('bounceBtn',false,v=>{ bounceOn=v; olSyncSettings(); });
+makeToggle('soundBtn',true, v=>soundOn=v);
+document.getElementById('diffSel').addEventListener('change',()=>olSyncSettings());
 
-// ── Mode switching ────────────────────────────────
+// ══════════════════════════════════════════════════
+// MODE SWITCHING
+// ══════════════════════════════════════════════════
 document.getElementById('btn1p').addEventListener('click',()=>setMode('1p'));
 document.getElementById('btn2p-mode').addEventListener('click',()=>setMode('2p'));
+document.getElementById('btn-online').addEventListener('click',()=>setMode('online'));
+
 function setMode(m){
+  if(mode==='online'&&m!=='online') olDisconnect();
   mode=m; clearInterval(gameLoop); running=false;
   document.getElementById('btn1p').classList.toggle('active',m==='1p');
   document.getElementById('btn2p-mode').classList.toggle('active',m==='2p');
-  document.getElementById('sb1p').style.display=m==='1p'?'flex':'none';
-  document.getElementById('sb2p').style.display=m==='2p'?'flex':'none';
-  document.getElementById('ctrl1p').style.display=m==='1p'?'flex':'none';
-  document.getElementById('ctrl2p').style.display=m==='2p'?'flex':'none';
+  document.getElementById('btn-online').classList.toggle('active',m==='online');
+  document.getElementById('sb1p').style.display       = m==='1p'     ?'flex':'none';
+  document.getElementById('sb2p').style.display       = m==='2p'     ?'flex':'none';
+  document.getElementById('sb-online').style.display  = m==='online' ?'flex':'none';
+  document.getElementById('ctrl1p').style.display     = m==='1p'     ?'flex':'none';
+  document.getElementById('ctrl2p').style.display     = m==='2p'     ?'flex':'none';
+  document.getElementById('ctrl-online').style.display= m==='online' ?'flex':'none';
+  document.getElementById('onlinePanel').style.display= m==='online' ?'flex':'none';
+  document.getElementById('startBtn').style.display   = m!=='online' ?'block':'none';
   document.getElementById('msg').textContent='';
-  if(m==='2p'){ p1wins=0; p2wins=0; document.getElementById('p1wins').textContent='0'; document.getElementById('p2wins').textContent='0'; }
-  showOverlay(m==='1p'?'🐍 SNAKE SHOOTER':'💥 1v1 SHOOTER');
-  document.getElementById('ov-msg').textContent='Eat food for ammo • Shoot to chop!';
-  document.getElementById('ov-sub').textContent='Press Start or Space to play';
+  if(m==='1p'){
+    showOverlay('🐍 SNAKE SHOOTER');
+    document.getElementById('ov-msg').textContent='Eat food for ammo • Shoot to chop!';
+    document.getElementById('ov-sub').textContent='Press Start or Space to play';
+  } else if(m==='2p'){
+    p1wins=0; p2wins=0;
+    document.getElementById('p1wins').textContent='0'; document.getElementById('p2wins').textContent='0';
+    showOverlay('💥 1v1 SHOOTER');
+    document.getElementById('ov-msg').textContent='P1: WASD+F  |  P2: Arrows+/';
+    document.getElementById('ov-sub').textContent='Press Start or Space to play';
+  } else {
+    olShowSetup();
+    showOverlay('🐍 ONLINE');
+    document.getElementById('ov-msg').textContent='Create or join a room below';
+    document.getElementById('ov-sub').textContent='';
+  }
 }
 
 // ══════════════════════════════════════════════════
-// GAME OBJECTS
+// GAME STATE
 // ══════════════════════════════════════════════════
-let snake, dir, nextDir, ammo, lastShot, score, best=0;
-let s1,d1,nd1,ammo1,lastShot1;
-let s2,d2,nd2,ammo2,lastShot2;
-let p1wins=0, p2wins=0;
-let foods=[], obstacles=[], bullets=[];
+let snake,dir,nextDir,ammo,lastShot,score,best=0;
+let s1,d1,nd1,ammo1,lastShot1,s2,d2,nd2,ammo2,lastShot2;
+let p1wins=0,p2wins=0;
+let foods=[],obstacles=[],bullets=[],gameLoop,running=false;
 
-// Bullet: {x, y, dx, dy, owner, trail:[{x,y}]}
-function makeBullet(head, d, owner){
-  return { x:head.x+d.x, y:head.y+d.y, dx:d.x, dy:d.y, owner, trail:[], age:0 };
-}
+function getDiff(){ return DIFF[document.getElementById('diffSel').value]; }
+function getSpeed(sc=0){ const d=getDiff(),l=Math.floor(sc/5); return Math.max(60,d.base-l*d.dec); }
 
 function placeFood(exclude=[]){
-  let pos, tries=0;
-  do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; tries++; }
-  while(tries<300&&(
-    exclude.some(e=>e&&e.x===pos.x&&e.y===pos.y)||
-    obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||
-    foods.some(f=>f.x===pos.x&&f.y===pos.y)
-  ));
+  let pos,t=0;
+  do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; t++; }
+  while(t<300&&(exclude.some(e=>e&&e.x===pos.x&&e.y===pos.y)||obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||foods.some(f=>f.x===pos.x&&f.y===pos.y)));
   return pos;
 }
-
-function fillFoods(snakeCells=[]){
-  while(foods.length < NUM_FOODS){
-    foods.push(placeFood(snakeCells));
-  }
+function fillFoods(cells=[]){
+  while(foods.length<NUM_FOODS) foods.push(placeFood(cells));
 }
-
-function spawnObstacles(n, snakeCells=[]){
+function spawnObs(n,cells=[]){
   for(let i=0;i<n;i++){
-    let pos,tries=0;
-    do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; tries++; }
-    while(tries<80&&(
-      snakeCells.some(s=>s.x===pos.x&&s.y===pos.y)||
-      obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||
-      foods.some(f=>f.x===pos.x&&f.y===pos.y)||
-      (pos.x>=7&&pos.x<=12&&pos.y>=7&&pos.y<=12)
-    ));
-    if(tries<80) obstacles.push(pos);
-  }
-}
-
-// ══════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════
-function init(){
-  hideOverlay(); running=true; clearInterval(gameLoop);
-  document.getElementById('msg').textContent='';
-  foods=[]; obstacles=[]; bullets=[];
-
-  if(mode==='1p'){
-    snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
-    dir={x:1,y:0}; nextDir={x:1,y:0};
-    ammo=AMMO_START; lastShot=0; score=0;
-    if(obstOn) spawnObstacles(5,[...snake]);
-    fillFoods([...snake]);
-    updateUI1p();
-    gameLoop=setInterval(step1p,getSpeed(0));
-  } else {
-    s1=[{x:5,y:10},{x:4,y:10},{x:3,y:10}];
-    d1={x:1,y:0}; nd1={x:1,y:0}; ammo1=AMMO_START; lastShot1=0;
-    s2=[{x:15,y:10},{x:16,y:10},{x:17,y:10}];
-    d2={x:-1,y:0}; nd2={x:-1,y:0}; ammo2=AMMO_START; lastShot2=0;
-    if(obstOn) spawnObstacles(4,[...s1,...s2]);
-    fillFoods([...s1,...s2]);
-    updateUI2p();
-    gameLoop=setInterval(step2p,getSpeed(0));
+    let pos,t=0;
+    do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; t++; }
+    while(t<80&&(cells.some(s=>s.x===pos.x&&s.y===pos.y)||obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||foods.some(f=>f.x===pos.x&&f.y===pos.y)||(pos.x>=7&&pos.x<=12&&pos.y>=7&&pos.y<=12)));
+    if(t<80) obstacles.push(pos);
   }
 }
 
 // ══════════════════════════════════════════════════
 // SHOOTING
 // ══════════════════════════════════════════════════
-function tryShoot1p(){
-  const now=Date.now();
-  if(ammo<=0){ playNoAmmo(); return; }
-  if(now-lastShot<SHOOT_COOLDOWN){ playNoAmmo(); return; }
-  if(snake.length<=MIN_LENGTH_TO_SHOOT){ playNoAmmo(); return; }
-  // Cost: lose tail segment
-  for(let i=0;i<SHOOT_COST;i++) if(snake.length>3) snake.pop();
-  ammo--;
-  lastShot=now;
-  bullets.push(makeBullet(snake[0],dir,1));
+function canShoot(am,ls,len){ return am>0&&Date.now()-ls>=SHOOT_COOLDOWN&&len>MIN_LEN; }
+function doShoot(body,d,owner,amRef,lsRef){
+  for(let i=0;i<SHOOT_COST;i++) if(body.length>3) body.pop();
+  amRef.v--; lsRef.v=Date.now();
+  bullets.push({x:body[0].x+d.x,y:body[0].y+d.y,dx:d.x,dy:d.y,owner,trail:[],age:0});
   playShoot();
-  updateUI1p();
 }
 
-function tryShoot(player){
-  const now=Date.now();
-  const sn=player===1?s1:s2;
-  const d=player===1?d1:d2;
-  let am=player===1?ammo1:ammo2;
-  let ls=player===1?lastShot1:lastShot2;
-  if(am<=0||now-ls<SHOOT_COOLDOWN||sn.length<=MIN_LENGTH_TO_SHOOT){ playNoAmmo(); return; }
-  for(let i=0;i<SHOOT_COST;i++) if(sn.length>3) sn.pop();
-  am--;
-  if(player===1){ammo1=am;lastShot1=now;}else{ammo2=am;lastShot2=now;}
-  bullets.push(makeBullet(sn[0],d,player));
-  playShoot();
+function tryShoot1p(){
+  if(!running) return;
+  if(!canShoot(ammo,lastShot,snake.length)){playNoAmmo();return;}
+  const am={v:ammo},ls={v:lastShot};
+  doShoot(snake,dir,1,am,ls);
+  ammo=am.v; lastShot=ls.v;
+  updateUI1p();
+}
+function tryShoot2p(p){
+  if(!running) return;
+  const [sn,d,am,ls]= p===1?[s1,d1,{v:ammo1},{v:lastShot1}]:[s2,d2,{v:ammo2},{v:lastShot2}];
+  if(!canShoot(am.v,ls.v,sn.length)){playNoAmmo();return;}
+  doShoot(sn,d,p,am,ls);
+  if(p===1){ammo1=am.v;lastShot1=ls.v;}else{ammo2=am.v;lastShot2=ls.v;}
   updateUI2p();
 }
 
 // ══════════════════════════════════════════════════
-// BULLET STEP (shared)
+// BULLET STEP
 // ══════════════════════════════════════════════════
 function stepBullets(allSnakes){
-  const toRemove=new Set();
-  const hits={}; // snakeIdx -> chopAt segment index
-
+  const remove=new Set(), hits={};
   bullets.forEach((b,bi)=>{
     b.trail.push({x:b.x,y:b.y});
     if(b.trail.length>4) b.trail.shift();
-    b.age++;
-
-    // Move bullet BULLET_SPEED tiles per tick
-    for(let step=0;step<BULLET_SPEED;step++){
-      let nx=b.x+b.dx, ny=b.y+b.dy;
-
-      // Wall handling
+    for(let s=0;s<BULLET_SPEED;s++){
+      let nx=b.x+b.dx,ny=b.y+b.dy;
       if(nx<0||nx>=COLS||ny<0||ny>=ROWS){
         if(bounceOn){
           if(nx<0||nx>=COLS) b.dx=-b.dx;
           if(ny<0||ny>=ROWS) b.dy=-b.dy;
           nx=b.x+b.dx; ny=b.y+b.dy;
+          if(nx<0||nx>=COLS||ny<0||ny>=ROWS){remove.add(bi);break;}
           playBounce();
-        } else { toRemove.add(bi); break; }
+        } else {remove.add(bi);break;}
       }
-
-      // Obstacle hit
-      if(obstacles.some(o=>o.x===nx&&o.y===ny)){ toRemove.add(bi); break; }
-
+      if(obstacles.some(o=>o.x===nx&&o.y===ny)){remove.add(bi);break;}
       b.x=nx; b.y=ny;
-
-      // Snake hit
       allSnakes.forEach((sn,si)=>{
         if(!sn) return;
         const body=Array.isArray(sn)?sn:sn.body;
-        const owner=b.owner;
-        // Can hit any snake (including self if head-on, but skip own head)
-        body.forEach((seg,segIdx)=>{
+        body.forEach((seg,idx)=>{
           if(b.x===seg.x&&b.y===seg.y){
-            if(!(si===owner-1&&segIdx===0)){ // don't remove own head
-              if(hits[si]===undefined||segIdx<hits[si]) hits[si]=segIdx;
-              toRemove.add(bi);
-            }
+            if(si===b.owner-1&&idx===0) return;
+            if(hits[si]===undefined||idx<hits[si]) hits[si]=idx;
+            remove.add(bi);
           }
         });
       });
     }
   });
-
-  // Apply hits
   Object.entries(hits).forEach(([si,chopIdx])=>{
-    const idx=parseInt(si);
-    const sn=allSnakes[idx];
-    if(!sn) return;
+    const i=parseInt(si);
+    const sn=allSnakes[i]; if(!sn) return;
     playHit();
-    if(chopIdx===0){
-      // Head hit = kill (handled by caller returning null)
-      allSnakes[idx]=null;
-    } else {
-      const body=Array.isArray(sn)?sn:sn.body;
-      body.splice(chopIdx); // chop from that segment onward
-    }
+    if(chopIdx===0) allSnakes[i]=null;
+    else { const body=Array.isArray(sn)?sn:sn.body; body.splice(chopIdx); }
   });
-
-  bullets=bullets.filter((_,i)=>!toRemove.has(i));
+  bullets=bullets.filter((_,i)=>!remove.has(i));
   return allSnakes;
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+function init(){
+  if(mode==='online') return;
+  hideOverlay(); running=true; clearInterval(gameLoop);
+  document.getElementById('msg').textContent='';
+  foods=[]; obstacles=[]; bullets=[];
+  if(mode==='1p'){
+    snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+    dir={x:1,y:0}; nextDir={x:1,y:0}; ammo=AMMO_START; lastShot=0; score=0;
+    if(obstOn) spawnObs(5,[...snake]);
+    fillFoods([...snake]); updateUI1p();
+    gameLoop=setInterval(step1p,getSpeed(0));
+  } else {
+    s1=[{x:5,y:10},{x:4,y:10},{x:3,y:10}]; d1={x:1,y:0}; nd1={x:1,y:0}; ammo1=AMMO_START; lastShot1=0;
+    s2=[{x:15,y:10},{x:16,y:10},{x:17,y:10}]; d2={x:-1,y:0}; nd2={x:-1,y:0}; ammo2=AMMO_START; lastShot2=0;
+    if(obstOn) spawnObs(4,[...s1,...s2]);
+    fillFoods([...s1,...s2]); updateUI2p();
+    gameLoop=setInterval(step2p,getSpeed(0));
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -420,41 +484,29 @@ function stepBullets(allSnakes){
 // ══════════════════════════════════════════════════
 function step1p(){
   dir=nextDir;
-  let nx=snake[0].x+dir.x, ny=snake[0].y+dir.y;
-  if(wallsOn){ if(nx<0||nx>=COLS||ny<0||ny>=ROWS){playDie();endGame1p();return;} }
-  else{ nx=(nx+COLS)%COLS; ny=(ny+ROWS)%ROWS; }
+  let nx=snake[0].x+dir.x,ny=snake[0].y+dir.y;
+  if(wallsOn){if(nx<0||nx>=COLS||ny<0||ny>=ROWS){playDie();endGame1p();return;}}
+  else{nx=(nx+COLS)%COLS;ny=(ny+ROWS)%ROWS;}
   const head={x:nx,y:ny};
   if(snake.some(s=>s.x===head.x&&s.y===head.y)||obstacles.some(o=>o.x===head.x&&o.y===head.y)){playDie();endGame1p();return;}
   snake.unshift(head);
-
-  // Food check
   const fi=foods.findIndex(f=>f.x===head.x&&f.y===head.y);
   if(fi>=0){
-    score++; if(score>best)best=score;
-    ammo++; playEat();
+    score++; if(score>best)best=score; ammo++; playEat();
     const pl=Math.floor((score-1)/5),nl=Math.floor(score/5);
-    if(nl>pl){playLevel();if(obstOn)spawnObstacles(2,[...snake]);}
-    foods.splice(fi,1);
-    fillFoods([...snake]);
+    if(nl>pl){playLevel();if(obstOn)spawnObs(2,[...snake]);}
+    foods.splice(fi,1); fillFoods([...snake]);
     clearInterval(gameLoop); gameLoop=setInterval(step1p,getSpeed(score));
   } else snake.pop();
-
-  // Bullets
-  const snakes=[snake];
-  stepBullets(snakes);
+  const snakes=[snake]; stepBullets(snakes);
   if(!snakes[0]){playDie();endGame1p();return;}
-  snake=snakes[0];
-
-  updateUI1p();
-  draw();
+  snake=snakes[0]; updateUI1p(); draw();
 }
-
 function endGame1p(){
   clearInterval(gameLoop); running=false;
   document.getElementById('msg').textContent=`💀 Game Over! Score: ${score} — Press Start or Space to retry.`;
   flashCanvas('#e94560');
 }
-
 function updateUI1p(){
   document.getElementById('score').textContent=score;
   document.getElementById('best').textContent=best;
@@ -469,14 +521,8 @@ function updateUI1p(){
 // ══════════════════════════════════════════════════
 function step2p(){
   d1=nd1; d2=nd2;
-  const h1=moveWrap(s1[0],d1), h2=moveWrap(s2[0],d2);
-
-  const ate1=foods.findIndex(f=>f.x===h1.x&&f.y===h1.y);
-  const ate2=foods.findIndex(f=>f.x===h2.x&&f.y===h2.y);
-
-  // Death checks
-  const dw1=wallsOn&&(h1.x<0||h1.x>=COLS||h1.y<0||h1.y>=ROWS);
-  const dw2=wallsOn&&(h2.x<0||h2.x>=COLS||h2.y<0||h2.y>=ROWS);
+  const h1=wrap(s1[0],d1),h2=wrap(s2[0],d2);
+  const dw1=wallsOn&&out(h1),dw2=wallsOn&&out(h2);
   const ds1=s1.slice(0,-1).some(s=>s.x===h1.x&&s.y===h1.y);
   const ds2=s2.slice(0,-1).some(s=>s.x===h2.x&&s.y===h2.y);
   const do1=obstacles.some(o=>o.x===h1.x&&o.y===h1.y);
@@ -486,140 +532,118 @@ function step2p(){
   const dh21=s1.slice(0,-1).some(s=>s.x===h2.x&&s.y===h2.y);
   let dead1=dw1||ds1||do1||dh12||(headOn&&!dh21);
   let dead2=dw2||ds2||do2||dh21||(headOn&&!dh12);
-
-  if(!dead1){ s1.unshift(h1); if(ate1<0) s1.pop(); }
-  if(!dead2){ s2.unshift(h2); if(ate2<0) s2.pop(); }
-
-  if(ate1>=0&&!dead1){ ammo1++; playEat(); foods.splice(ate1,1); fillFoods([...s1,...s2]); }
-  if(ate2>=0&&!dead2){ ammo2++; playEat(); foods.splice(ate2<ate1&&ate1>=0?ate2:ate2,1); fillFoods([...s1,...s2]); }
-
-  // Bullets
-  const snakes=[s1,s2];
-  stepBullets(snakes);
-  if(!snakes[0]) dead1=true;
-  if(!snakes[1]) dead2=true;
-  if(snakes[0]) s1=snakes[0];
-  if(snakes[1]) s2=snakes[1];
-
+  if(!dead1){s1.unshift(h1);const fi=foods.findIndex(f=>f.x===h1.x&&f.y===h1.y);if(fi>=0){ammo1++;playEat();foods.splice(fi,1);fillFoods([...s1,...s2]);}else s1.pop();}
+  if(!dead2){s2.unshift(h2);const fi=foods.findIndex(f=>f.x===h2.x&&f.y===h2.y);if(fi>=0){ammo2++;playEat();foods.splice(fi,1);fillFoods([...s1,...s2]);}else s2.pop();}
+  const snakes=[s1,s2]; stepBullets(snakes);
+  if(!snakes[0])dead1=true; if(!snakes[1])dead2=true;
+  if(snakes[0])s1=snakes[0]; if(snakes[1])s2=snakes[1];
   if(dead1||dead2){
     playDie();
-    if(dead1&&dead2) endGame2p(0);
-    else if(dead1){ p2wins++; endGame2p(2); }
-    else{ p1wins++; endGame2p(1); }
+    if(dead1&&dead2)endGame2p(0);
+    else if(dead1){p2wins++;endGame2p(2);}
+    else{p1wins++;endGame2p(1);}
     return;
   }
-
-  updateUI2p();
-  draw();
+  updateUI2p(); draw();
 }
-
-function moveWrap(head,d){
-  let nx=head.x+d.x,ny=head.y+d.y;
-  if(!wallsOn){nx=(nx+COLS)%COLS;ny=(ny+ROWS)%ROWS;}
-  return{x:nx,y:ny};
-}
-
-function endGame2p(winner){
+function wrap(h,d){ let nx=h.x+d.x,ny=h.y+d.y; if(!wallsOn){nx=(nx+COLS)%COLS;ny=(ny+ROWS)%ROWS;} return{x:nx,y:ny}; }
+function out(h){ return h.x<0||h.x>=COLS||h.y<0||h.y>=ROWS; }
+function endGame2p(w){
   clearInterval(gameLoop); running=false;
-  document.getElementById('p1wins').textContent=p1wins;
-  document.getElementById('p2wins').textContent=p2wins;
-  const msg=winner===0?"💥 It's a DRAW!":winner===1?'🟢 Player 1 Wins!':'🔴 Player 2 Wins!';
-  document.getElementById('msg').textContent=msg+' — Press Start or Space to play again.';
-  flashCanvas(winner===1?'#4ecca3':winner===2?'#e94560':'#f5a623');
-  if(winner>0) playWin();
+  updateUI2p();
+  const msg=w===0?"💥 Draw!":w===1?'🟢 P1 Wins!':'🔴 P2 Wins!';
+  document.getElementById('msg').textContent=msg+' — Press Start or Space again.';
+  flashCanvas(w===1?'#4ecca3':w===2?'#e94560':'#f5a623');
+  if(w>0) playWin();
 }
-
 function updateUI2p(){
-  document.getElementById('p1ammo').textContent=ammo1;
-  document.getElementById('p2ammo').textContent=ammo2;
   document.getElementById('p1wins').textContent=p1wins;
   document.getElementById('p2wins').textContent=p2wins;
+  document.getElementById('p1ammo').textContent=ammo1||0;
+  document.getElementById('p2ammo').textContent=ammo2||0;
 }
 
 // ══════════════════════════════════════════════════
 // DRAW
 // ══════════════════════════════════════════════════
 function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  // Grid
+  ctx.clearRect(0,0,400,400);
   ctx.strokeStyle='rgba(255,255,255,0.04)';
   for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*TILE,0);ctx.lineTo(i*TILE,400);ctx.stroke();}
   for(let j=0;j<=ROWS;j++){ctx.beginPath();ctx.moveTo(0,j*TILE);ctx.lineTo(400,j*TILE);ctx.stroke();}
 
   // Obstacles
-  obstacles.forEach(o=>{
+  const obs=mode==='online'?olObstacles:obstacles;
+  obs.forEach(o=>{
     ctx.fillStyle='#c0392b'; ctx.shadowBlur=6; ctx.shadowColor='#e94560';
-    roundRect(o.x*TILE+1,o.y*TILE+1,TILE-2,TILE-2,3); ctx.shadowBlur=0;
-    ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=1.5;
+    rr(o.x*TILE+1,o.y*TILE+1,TILE-2,TILE-2,3); ctx.shadowBlur=0;
+    ctx.strokeStyle='rgba(255,255,255,.22)'; ctx.lineWidth=1.5;
     ctx.beginPath();ctx.moveTo(o.x*TILE+4,o.y*TILE+4);ctx.lineTo(o.x*TILE+TILE-4,o.y*TILE+TILE-4);ctx.stroke();
     ctx.beginPath();ctx.moveTo(o.x*TILE+TILE-4,o.y*TILE+4);ctx.lineTo(o.x*TILE+4,o.y*TILE+TILE-4);ctx.stroke();
     ctx.lineWidth=1;
   });
 
-  // Food (5 pieces, pulsing)
+  // Food
   const pulse=0.5+0.5*Math.sin(Date.now()/200);
-  foods.forEach((f,i)=>{
+  const fds=mode==='online'?olFoods:foods;
+  fds.forEach((f,i)=>{
+    if(!f) return;
     const col=FOOD_COLORS[i%FOOD_COLORS.length];
     ctx.fillStyle=col; ctx.shadowBlur=10+8*pulse; ctx.shadowColor=col;
-    ctx.beginPath(); ctx.arc(f.x*TILE+TILE/2,f.y*TILE+TILE/2,TILE/2-2+pulse,0,Math.PI*2); ctx.fill();
+    ctx.beginPath();ctx.arc(f.x*TILE+TILE/2,f.y*TILE+TILE/2,TILE/2-2+pulse,0,Math.PI*2);ctx.fill();
     ctx.shadowBlur=0;
   });
 
-  // Bullets + trails
-  bullets.forEach(b=>{
-    // Trail
-    b.trail.forEach((t,i)=>{
-      const alpha=(i+1)/b.trail.length*0.5;
+  // Bullets
+  const blist=mode==='online'?olBullets:bullets;
+  blist.forEach(b=>{
+    (b.trail||[]).forEach((t,i)=>{
+      const alpha=(i+1)/((b.trail.length)||1)*0.5;
       const col=b.owner===1?`rgba(78,204,163,${alpha})`:`rgba(233,69,96,${alpha})`;
       ctx.fillStyle=col;
-      const sz=(i+1)/b.trail.length*(TILE*0.5);
-      ctx.beginPath(); ctx.arc(t.x*TILE+TILE/2,t.y*TILE+TILE/2,sz,0,Math.PI*2); ctx.fill();
+      const sz=(i+1)/((b.trail.length)||1)*(TILE*0.5);
+      ctx.beginPath();ctx.arc(t.x*TILE+TILE/2,t.y*TILE+TILE/2,sz,0,Math.PI*2);ctx.fill();
     });
-    // Bullet head
-    const col=b.owner===1?'#4ecca3':'#e94560';
+    const col=PLAYER_COLORS[(b.owner-1)%PLAYER_COLORS.length];
     ctx.fillStyle=col; ctx.shadowBlur=14; ctx.shadowColor=col;
-    ctx.beginPath(); ctx.arc(b.x*TILE+TILE/2,b.y*TILE+TILE/2,TILE*0.38,0,Math.PI*2); ctx.fill();
+    ctx.beginPath();ctx.arc(b.x*TILE+TILE/2,b.y*TILE+TILE/2,TILE*0.38,0,Math.PI*2);ctx.fill();
     ctx.shadowBlur=0;
-    // Inner bright core
     ctx.fillStyle='#fff';
-    ctx.beginPath(); ctx.arc(b.x*TILE+TILE/2,b.y*TILE+TILE/2,TILE*0.15,0,Math.PI*2); ctx.fill();
+    ctx.beginPath();ctx.arc(b.x*TILE+TILE/2,b.y*TILE+TILE/2,TILE*0.15,0,Math.PI*2);ctx.fill();
   });
 
   // Snakes
-  if(mode==='1p'){
-    drawSnake(snake,dir,'#4ecca3',r=>`hsl(${160-r*40},70%,${55-r*15}%)`);
+  if(mode==='online'){
+    olSnakes.forEach((s,i)=>{ if(!s||!s.alive) return; drawSnake(s.body,s.dir,s.color,PLAYER_BODY_FN[s.id-1]); });
+  } else if(mode==='1p'){
+    drawSnake(snake,dir,'#4ecca3',PLAYER_BODY_FN[0]);
   } else {
-    drawSnake(s2,d2,'#e94560',r=>`hsl(${345+r*20},${70-r*20}%,${50-r*15}%)`);
-    drawSnake(s1,d1,'#4ecca3',r=>`hsl(${160-r*40},70%,${55-r*15}%)`);
+    drawSnake(s2,d2,'#e94560',PLAYER_BODY_FN[1]);
+    drawSnake(s1,d1,'#4ecca3',PLAYER_BODY_FN[0]);
   }
 
-  // Wrap indicator
-  if(!wallsOn){
-    ctx.strokeStyle=`rgba(78,204,163,${0.2+0.1*Math.sin(Date.now()/300)})`;
-    ctx.lineWidth=4; ctx.strokeRect(2,2,396,396); ctx.lineWidth=1;
-  }
+  // Wrap border
+  const wo=mode==='online'?(olSettings?.wallsOn??wallsOn):wallsOn;
+  if(!wo){ ctx.strokeStyle=`rgba(78,204,163,${0.2+0.1*Math.sin(Date.now()/300)})`; ctx.lineWidth=4; ctx.strokeRect(2,2,396,396); ctx.lineWidth=1; }
 }
 
 function drawSnake(body,d,color,bodyFn){
-  if(!body||body.length===0) return;
+  if(!body||!body.length) return;
   body.forEach((seg,i)=>{
     const ratio=i/body.length;
     ctx.fillStyle=i===0?color:bodyFn(ratio);
     ctx.shadowBlur=i===0?12:0; ctx.shadowColor=color;
-    roundRect(seg.x*TILE+1,seg.y*TILE+1,TILE-2,TILE-2,4);
-    ctx.shadowBlur=0;
+    rr(seg.x*TILE+1,seg.y*TILE+1,TILE-2,TILE-2,4); ctx.shadowBlur=0;
     if(i===0){
       ctx.fillStyle='#1a1a2e';
-      const cx=seg.x*TILE+TILE/2,cy=seg.y*TILE+TILE/2;
-      const ox=d.y*4,oy=d.x*4;
+      const cx=seg.x*TILE+TILE/2,cy=seg.y*TILE+TILE/2,ox=d.y*4,oy=d.x*4;
       ctx.beginPath();ctx.arc(cx+d.x*4+ox,cy+d.y*4+oy,2,0,Math.PI*2);ctx.fill();
       ctx.beginPath();ctx.arc(cx+d.x*4-ox,cy+d.y*4-oy,2,0,Math.PI*2);ctx.fill();
     }
   });
 }
 
-function roundRect(x,y,w,h,r){
+function rr(x,y,w,h,r){
   ctx.beginPath();
   ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
   ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
@@ -627,91 +651,163 @@ function roundRect(x,y,w,h,r){
   ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
   ctx.closePath();ctx.fill();
 }
-
-function flashCanvas(col){
-  let f=0;
-  const fl=setInterval(()=>{ ctx.fillStyle=`${col}${f%2===0?'44':'00'}`; ctx.fillRect(0,0,400,400); if(++f>5)clearInterval(fl); },100);
-}
-function showOverlay(title){ document.getElementById('overlay').style.display='flex'; document.getElementById('ov-title').textContent=title; }
+function flashCanvas(col){ let f=0; const fl=setInterval(()=>{ ctx.fillStyle=`${col}${f%2===0?'44':'00'}`; ctx.fillRect(0,0,400,400); if(++f>5)clearInterval(fl); },100); }
+function showOverlay(t){ document.getElementById('overlay').style.display='flex'; document.getElementById('ov-title').textContent=t; }
 function hideOverlay(){ document.getElementById('overlay').style.display='none'; }
 
 // ══════════════════════════════════════════════════
 // INPUT
 // ══════════════════════════════════════════════════
-const MOVE_DIRS={
-  ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},
-  w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0}
-};
+const DIRS={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0}};
+const P1K=new Set(['w','a','s','d']), P2K=new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight']);
+
 document.addEventListener('keydown',e=>{
-  if(e.key===' '||e.key==='Enter'){
-    e.preventDefault();
-    if(!running){init();return;}
-    if(mode==='1p') tryShoot1p();
+  if(mode==='online'){
+    const dv=DIRS[e.key]; if(dv){e.preventDefault();olSendDir(dv);return;}
+    if(e.key===' '||e.key.toLowerCase()==='f'){e.preventDefault();olShoot();return;}
     return;
   }
-  if(e.key.toLowerCase()==='f'&&mode==='1p'&&running){e.preventDefault();tryShoot1p();return;}
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();if(!running){init();}else if(mode==='1p')tryShoot1p();return;}
+  if(e.key.toLowerCase()==='f'){e.preventDefault();if(running){mode==='1p'?tryShoot1p():tryShoot2p(1);}return;}
+  if(e.key==='/'&&mode==='2p'){e.preventDefault();if(running)tryShoot2p(2);return;}
   if(mode==='2p'){
-    if(['w','a','s','d'].includes(e.key)){
-      const dv=MOVE_DIRS[e.key];
-      if(dv&&!(dv.x===-d1.x&&dv.y===-d1.y)){e.preventDefault();nd1=dv;}
-    }
-    if(e.key.toLowerCase()==='f'&&running){e.preventDefault();tryShoot(1);return;}
-    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
-      const dv=MOVE_DIRS[e.key];
-      if(dv&&!(dv.x===-d2.x&&dv.y===-d2.y)){e.preventDefault();nd2=dv;}
-    }
-    if(e.key==='/'&&running){e.preventDefault();tryShoot(2);return;}
+    if(P1K.has(e.key)){const dv=DIRS[e.key];if(dv&&!(dv.x===-d1.x&&dv.y===-d1.y)){e.preventDefault();nd1=dv;}}
+    if(P2K.has(e.key)){const dv=DIRS[e.key];if(dv&&!(dv.x===-d2.x&&dv.y===-d2.y)){e.preventDefault();nd2=dv;}}
     return;
   }
-  // 1P movement
-  const dv=MOVE_DIRS[e.key];
-  if(dv&&!(dv.x===-dir.x&&dv.y===-dir.y)){e.preventDefault();nextDir=dv;}
+  const dv=DIRS[e.key]; if(dv&&!(dv.x===-dir.x&&dv.y===-dir.y)){e.preventDefault();nextDir=dv;}
 });
 
 document.getElementById('startBtn').addEventListener('click',init);
 
-// D-pad 1P
-[['cbu',{x:0,y:-1}],['cbd',{x:0,y:1}],['cbl',{x:-1,y:0}],['cbr',{x:1,y:0}]].forEach(([id,dv])=>{
-  document.getElementById(id).addEventListener('click',()=>{ if(running&&!(dv.x===-dir.x&&dv.y===-dir.y)) nextDir=dv; });
+// D-pads
+[['g1u',{x:0,y:-1},'1'],['g1d',{x:0,y:1},'1'],['g1l',{x:-1,y:0},'1'],['g1r',{x:1,y:0},'1']].forEach(([id,dv])=>{
+  document.getElementById(id).addEventListener('click',()=>{if(running&&!(dv.x===-dir.x&&dv.y===-dir.y))nextDir=dv;});
 });
-document.getElementById('cbshoot').addEventListener('click',()=>{ if(running) tryShoot1p(); });
-
-// D-pad 2P P1
-[['cb2u',{x:0,y:-1}],['cb2d',{x:0,y:1}],['cb2l',{x:-1,y:0}],['cb2r',{x:1,y:0}]].forEach(([id,dv])=>{
-  document.getElementById(id).addEventListener('click',()=>{ if(running&&!(dv.x===-d1.x&&dv.y===-d1.y)) nd1=dv; });
+[['g2u',{x:0,y:-1}],['g2d',{x:0,y:1}],['g2l',{x:-1,y:0}],['g2r',{x:1,y:0}]].forEach(([id,dv])=>{
+  document.getElementById(id).addEventListener('click',()=>{if(running&&!(dv.x===-d1.x&&dv.y===-d1.y))nd1=dv;});
 });
-document.getElementById('cb2shoot').addEventListener('click',()=>{ if(running) tryShoot(1); });
-
-// D-pad 2P P2
-[['cb3u',{x:0,y:-1}],['cb3d',{x:0,y:1}],['cb3l',{x:-1,y:0}],['cb3r',{x:1,y:0}]].forEach(([id,dv])=>{
-  document.getElementById(id).addEventListener('click',()=>{ if(running&&!(dv.x===-d2.x&&dv.y===-d2.y)) nd2=dv; });
+[['g3u',{x:0,y:-1}],['g3d',{x:0,y:1}],['g3l',{x:-1,y:0}],['g3r',{x:1,y:0}]].forEach(([id,dv])=>{
+  document.getElementById(id).addEventListener('click',()=>{if(running&&!(dv.x===-d2.x&&dv.y===-d2.y))nd2=dv;});
 });
-document.getElementById('cb3shoot').addEventListener('click',()=>{ if(running) tryShoot(2); });
+[['g4u',{x:0,y:-1}],['g4d',{x:0,y:1}],['g4l',{x:-1,y:0}],['g4r',{x:1,y:0}]].forEach(([id,dv])=>{
+  document.getElementById(id).addEventListener('click',()=>olSendDir(dv));
+});
+document.getElementById('g1shoot').addEventListener('click',()=>{if(running)tryShoot1p();});
+document.getElementById('g2shoot').addEventListener('click',()=>{if(running)tryShoot2p(1);});
+document.getElementById('g3shoot').addEventListener('click',()=>{if(running)tryShoot2p(2);});
+document.getElementById('g4shoot').addEventListener('click',()=>olShoot());
 
-// Swipe to move, double-tap to shoot
+// Swipe + double-tap
 let tx=0,ty=0,lastTap=0;
 canvas.addEventListener('touchstart',e=>{
-  tx=e.touches[0].clientX; ty=e.touches[0].clientY;
+  tx=e.touches[0].clientX;ty=e.touches[0].clientY;
   const now=Date.now();
-  if(now-lastTap<300){ if(running&&mode==='1p') tryShoot1p(); }
+  if(now-lastTap<300){if(running){mode==='online'?olShoot():mode==='1p'?tryShoot1p():null;}}
   lastTap=now;
 },{passive:true});
 canvas.addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
   if(Math.abs(dx)<8&&Math.abs(dy)<8) return;
   const dv=Math.abs(dx)>Math.abs(dy)?(dx>0?{x:1,y:0}:{x:-1,y:0}):(dy>0?{x:0,y:1}:{x:0,y:-1});
-  if(mode==='1p'&&!(dv.x===-dir.x&&dv.y===-dir.y)) nextDir=dv;
+  if(mode==='online')olSendDir(dv);
+  else if(mode==='1p'&&!(dv.x===-dir.x&&dv.y===-dir.y))nextDir=dv;
 },{passive:true});
 
-// Idle animation + cooldown timer
-function idleAnim(){
-  draw();
-  if(running&&mode==='1p') updateUI1p();
-  requestAnimationFrame(idleAnim);
-}
+// Idle loop
+function idleAnim(){ draw(); if(running&&mode==='1p')updateUI1p(); requestAnimationFrame(idleAnim); }
 idleAnim();
 showOverlay('🐍 SNAKE SHOOTER');
-ctx.fillStyle='#0f3460'; ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle='#0f3460';ctx.fillRect(0,0,400,400);
+
+// ══════════════════════════════════════════════════
+// ONLINE MULTIPLAYER
+// ══════════════════════════════════════════════════
+let olWs=null,olPlayerNum=null,olRoomCode=null,olSettings=null,olConnected=1;
+let olSnakes=[],olFoods=[],olObstacles=[],olBullets=[];
+
+function olSend(msg){ if(olWs&&olWs.readyState===WebSocket.OPEN) olWs.send(JSON.stringify(msg)); }
+function olSendDir(dv){ if(!running)return; olSend({type:'dir',d:dv}); }
+function olShoot(){ if(!running)return; olSend({type:'shoot'}); }
+
+function olSyncSettings(){
+  if(mode!=='online'||!olWs||olPlayerNum!==1||!olSettings||olSettings._gameRunning) return;
+  olSend({type:'settings_update',boardSize:'small',wallsOn,obstOn,bounceOn,diff:document.getElementById('diffSel').value});
+}
+
+function applySettingsFromServer(s){
+  wallsOn=s.wallsOn; obstOn=s.obstOn; bounceOn=s.bounceOn||false;
+  document.getElementById('diffSel').value=s.diff;
+  setToggleUI('wallsBtn',wallsOn); setToggleUI('obstBtn',obstOn); setToggleUI('bounceBtn',bounceOn);
+}
+
+function olConnect(onOpen){
+  if(olWs&&olWs.readyState===WebSocket.OPEN){onOpen();return;}
+  const proto=location.protocol==='https:'?'wss:':'ws:';
+  try{
+    olWs=new WebSocket(`${proto}//${location.host}`);
+    olWs.onopen=()=>onOpen();
+    olWs.onmessage=e=>{try{olHandleMsg(JSON.parse(e.data));}catch(_){}};
+    olWs.onclose=()=>olHandleClose();
+    olWs.onerror=()=>olSetError('⚠️ No server found. Online mode requires a hosted WebSocket backend.');
+  }catch(e){olSetError('⚠️ Could not connect. Deploy with a Node.js server to enable online play.');}
+}
+
+function olHandleMsg(msg){
+  switch(msg.type){
+    case 'created': olRoomCode=msg.code;olPlayerNum=1;olConnected=1;olSettings={...msg.settings};buildOlSb(olSettings.maxPlayers);olShowWaiting(msg.code,1,olSettings.maxPlayers);break;
+    case 'joined': olRoomCode=msg.code;olPlayerNum=msg.player;olConnected=msg.player;olSettings={...msg.settings};applySettingsFromServer(msg.settings);buildOlSb(olSettings.maxPlayers);olShowWaiting(msg.code,msg.player,olSettings.maxPlayers);document.getElementById('ol-status-text').textContent='Connected! Waiting for game to start…';break;
+    case 'player_joined': {const maxP=olSettings?.maxPlayers||2;olConnected=msg.connected;updateDots(olConnected,maxP);document.getElementById('ol-status-text').textContent=`Player ${msg.player} joined!`;if(olPlayerNum===1&&olConnected>=2)document.getElementById('ol-start-btn').style.display='block';break;}
+    case 'settings_sync': olSettings={...msg.settings};if(olPlayerNum!==1)applySettingsFromServer(msg.settings);break;
+    case 'countdown': {const el=document.getElementById('ol-countdown');el.style.display='block';el.textContent=msg.count;playBeep();document.getElementById('ol-status-text').textContent='Get ready!';document.getElementById('ol-start-btn').style.display='none';break;}
+    case 'state':
+      olSnakes=msg.snakes; olFoods=msg.foods; olObstacles=msg.obstacles||[]; olBullets=msg.bullets||[];
+      if(!running){running=true;if(olSettings)olSettings._gameRunning=true;hideOverlay();document.getElementById('msg').textContent='';olShowIngame();}
+      break;
+    case 'end': {
+      running=false;if(olSettings)olSettings._gameRunning=false;
+      if(msg.wins)updateOlSb(msg.wins);
+      const colors=['🟢','🔴','🟠','🟣'];
+      let txt=msg.winner===0?"💥 It's a DRAW!":msg.winner===olPlayerNum?`${colors[olPlayerNum-1]} You Win! 🎉`:`${colors[msg.winner-1]} Player ${msg.winner} Wins!`;
+      document.getElementById('msg').textContent=txt;
+      flashCanvas(msg.winner===olPlayerNum?'#4ecca3':msg.winner>0?'#e94560':'#f5a623');
+      if(msg.winner===olPlayerNum)playWin();else if(msg.winner>0)playDie();
+      document.getElementById('ol-rematch-btn').style.display='block';
+      document.getElementById('ol-rematch-btn').disabled=false;
+      document.getElementById('ol-rematch-btn').textContent='🔄 Rematch';
+      break;
+    }
+    case 'restart_vote': document.getElementById('msg').textContent=`Rematch: ${msg.have}/${msg.need} votes. `+(msg.from===olPlayerNum?'Your vote counted!':'Click Rematch to vote.');break;
+    case 'player_left': {const colors=['🟢','🔴','🟠','🟣'];olConnected=Math.max(1,olConnected-1);document.getElementById('msg').textContent=`${colors[msg.player-1]} Player ${msg.player} ${running?'disconnected.':'left.'}`;if(!running&&olSettings)updateDots(olConnected,olSettings.maxPlayers);if(olPlayerNum===1&&olConnected<2)document.getElementById('ol-start-btn').style.display='none';break;}
+    case 'disconnect': running=false;document.getElementById('msg').textContent='⚠️ Room closed.';olReset();olShowSetup();showOverlay('🐍 ONLINE');document.getElementById('ov-msg').textContent='Room closed. Create or join a new room.';break;
+    case 'error': olSetError(msg.msg||'Something went wrong.');break;
+  }
+}
+
+function olHandleClose(){
+  if(mode!=='online')return;
+  running=false;
+  if(olRoomCode){document.getElementById('msg').textContent='Connection lost.';olShowSetup();showOverlay('🐍 ONLINE');document.getElementById('ov-msg').textContent='Create or join a room below';}
+  olReset();
+}
+function olReset(){ olWs=null;olRoomCode=null;olPlayerNum=null;olSettings=null;olSnakes=[];olFoods=[];olObstacles=[];olBullets=[];running=false; }
+function olDisconnect(){ if(olWs){olWs.close();olWs=null;}olReset(); }
+
+function olShowSetup(){ document.getElementById('ol-setup').style.display='flex';document.getElementById('ol-waiting').style.display='none';document.getElementById('ol-ingame').style.display='none';document.getElementById('ol-error').textContent='';document.getElementById('ol-code-in').value=''; }
+function olShowWaiting(code,connected,maxP){ document.getElementById('ol-setup').style.display='none';document.getElementById('ol-waiting').style.display='flex';document.getElementById('ol-ingame').style.display='none';document.getElementById('ol-code-display').textContent=code;document.getElementById('ol-countdown').style.display='none';document.getElementById('ol-status-text').textContent='Waiting for players…';document.getElementById('ol-start-btn').style.display='none';updateDots(connected,maxP); }
+function olShowIngame(){ document.getElementById('ol-setup').style.display='none';document.getElementById('ol-waiting').style.display='none';document.getElementById('ol-ingame').style.display='flex';document.getElementById('ol-code-ingame').textContent=olRoomCode||'';const pc=['🟢','🔴','🟠','🟣'];document.getElementById('ol-player-label').textContent=`${pc[olPlayerNum-1]} You are P${olPlayerNum}`;document.getElementById('ol-dpad-label').textContent=`${pc[olPlayerNum-1]} Your controls (P${olPlayerNum})`;document.getElementById('ol-rematch-btn').style.display='none';document.getElementById('sb-online').style.display='flex'; }
+function olSetError(txt){ document.getElementById('ol-error').textContent=txt; }
+function updateDots(connected,maxP){ document.getElementById('ol-dots').innerHTML=Array.from({length:maxP},(_,i)=>`<span style="font-size:1.1rem;color:${i<connected?PLAYER_COLORS[i]:'#333'}">●</span>`).join('');document.getElementById('ol-connected-text').textContent=`${connected}/${maxP} connected`; }
+function buildOlSb(n){ const bgs=['#1e3a5f','#3a1e2e','#2e2a1e','#2a1e3a'];const sb=document.getElementById('sb-online');sb.innerHTML='';for(let i=0;i<n;i++){const b=document.createElement('div');b.className='ol-score-badge';b.id=`olbadge-${i+1}`;b.style.cssText=`background:${bgs[i]};border:2px solid ${PLAYER_COLORS[i]};`;const lbl=i+1===olPlayerNum?'🎮 You':`P${i+1}`;b.innerHTML=`<div style="color:${PLAYER_COLORS[i]};font-weight:bold;font-size:.78rem">${lbl}</div><div class="pts" id="olwins-${i+1}" style="color:${PLAYER_COLORS[i]}">0</div><div style="font-size:.65rem;color:#aaa">wins</div>`;sb.appendChild(b);} }
+function updateOlSb(wins){ wins.forEach((w,i)=>{const el=document.getElementById(`olwins-${i+1}`);if(el)el.textContent=w;}); }
+
+document.getElementById('ol-create-btn').addEventListener('click',()=>{ olSetError('');olConnect(()=>{olSend({type:'create',maxPlayers:parseInt(document.getElementById('ol-max-players').value)||2,wallsOn,obstOn,bounceOn,diff:document.getElementById('diffSel').value});}); });
+document.getElementById('ol-join-btn').addEventListener('click',()=>{ const code=document.getElementById('ol-code-in').value.trim().toUpperCase();if(code.length<4){olSetError('Enter a 4-character room code.');return;}olSetError('');olConnect(()=>olSend({type:'join',code})); });
+document.getElementById('ol-code-in').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('ol-join-btn').click();});
+document.getElementById('ol-start-btn').addEventListener('click',()=>{olSend({type:'start_game'});document.getElementById('ol-start-btn').style.display='none';document.getElementById('ol-status-text').textContent='Starting…';});
+document.getElementById('ol-cancel-btn').addEventListener('click',()=>{olDisconnect();olShowSetup();showOverlay('🐍 ONLINE');document.getElementById('ov-msg').textContent='Create or join a room below';});
+document.getElementById('ol-leave-btn').addEventListener('click',()=>{olDisconnect();olShowSetup();showOverlay('🐍 ONLINE');document.getElementById('ov-msg').textContent='Create or join a room below';document.getElementById('msg').textContent='';document.getElementById('sb-online').style.display='none';});
+document.getElementById('ol-rematch-btn').addEventListener('click',function(){this.disabled=true;this.textContent='Waiting for others…';olSend({type:'restart'});});
 </script>
 </body>
 </html>
