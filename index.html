@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snake Game</title>
+<title>Snake Shooter</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -11,302 +11,163 @@ body {
   align-items:center; justify-content:center; min-height:100vh;
   font-family:'Segoe UI',sans-serif; color:#eee; padding:10px;
 }
-h1 { font-size:1.8rem; margin-bottom:6px; color:#4ecca3; letter-spacing:3px; }
+h1 { font-size:1.8rem; margin-bottom:4px; color:#4ecca3; letter-spacing:3px; }
+#subtitle { font-size:.75rem; color:#a78bfa; margin-bottom:6px; letter-spacing:2px; }
 
 #modeBar { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
-.mode-btn {
-  padding:6px 16px; border-radius:20px; border:2px solid #4ecca3;
-  background:transparent; color:#4ecca3; font-size:.85rem; cursor:pointer; transition:.15s;
-}
+.mode-btn { padding:6px 16px; border-radius:20px; border:2px solid #4ecca3; background:transparent; color:#4ecca3; font-size:.85rem; cursor:pointer; transition:.15s; }
 .mode-btn.active { background:#4ecca3; color:#1a1a2e; font-weight:bold; }
-.mode-btn.online-btn { border-color:#a78bfa; color:#a78bfa; }
-.mode-btn.online-btn.active { background:#a78bfa; color:#1a1a2e; }
 
-/* ── Scoreboards ── */
-#sb1p { display:flex; gap:30px; margin-bottom:8px; }
+#sb1p { display:flex; gap:20px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
 .score-box { text-align:center; }
-.score-box span { display:block; font-size:1.4rem; font-weight:bold; color:#4ecca3; }
+.score-box span { display:block; font-size:1.3rem; font-weight:bold; color:#4ecca3; }
+.ammo-box span { color:#f5a623; }
+.cool-box span { color:#a78bfa; }
 
-#sb2p { display:flex; align-items:center; gap:0; margin-bottom:8px; width:400px; max-width:98vw; }
-.p-score { flex:1; padding:6px 10px; border-radius:6px; font-size:.85rem; text-align:center; }
+#sb2p { display:flex; align-items:center; gap:0; margin-bottom:8px; width:420px; max-width:98vw; }
+.p-score { flex:1; padding:5px 8px; border-radius:6px; font-size:.8rem; text-align:center; }
 .p1-side { background:#1e3a5f; border:2px solid #4ecca3; border-radius:6px 0 0 6px; }
 .p2-side { background:#3a1e2e; border:2px solid #e94560; border-radius:0 6px 6px 0; }
-.p-score .name { font-weight:bold; font-size:.95rem; }
+.p-score .name { font-weight:bold; font-size:.9rem; }
 .p1-side .name { color:#4ecca3; } .p2-side .name { color:#e94560; }
-.p-score .pts { font-size:1.4rem; font-weight:bold; }
+.p-score .pts { font-size:1.3rem; font-weight:bold; }
+.p-ammo { font-size:.75rem; color:#f5a623; }
 .vs-badge { background:#16213e; border:2px solid #555; padding:4px 8px; font-weight:bold; color:#aaa; font-size:.9rem; }
 
-/* Online multi-player scoreboard */
-#sb-online { display:none; flex-wrap:wrap; gap:6px; margin-bottom:8px; justify-content:center; }
-.ol-score-badge { padding:5px 12px; border-radius:8px; text-align:center; min-width:64px; }
-.ol-score-badge .pts { font-size:1.2rem; font-weight:bold; }
-
-/* ── Options ── */
-#options { display:flex; gap:10px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
-.opt-group { display:flex; flex-direction:column; align-items:center; gap:4px; font-size:.8rem; color:#aaa; }
-.opt-group label { font-size:.75rem; color:#4ecca3; text-transform:uppercase; letter-spacing:1px; }
-select, .toggle-btn {
-  background:#16213e; border:2px solid #4ecca3; color:#eee;
-  border-radius:6px; padding:4px 8px; font-size:.85rem; cursor:pointer;
-}
-.toggle-btn { padding:4px 12px; transition:.15s; min-width:60px; text-align:center; }
+#options { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; }
+.opt-group { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:.78rem; color:#aaa; }
+.opt-group label { font-size:.72rem; color:#4ecca3; text-transform:uppercase; letter-spacing:1px; }
+select, .toggle-btn { background:#16213e; border:2px solid #4ecca3; color:#eee; border-radius:6px; padding:3px 7px; font-size:.82rem; cursor:pointer; }
+.toggle-btn { padding:3px 10px; transition:.15s; min-width:55px; text-align:center; }
 .toggle-btn.on { background:#4ecca3; color:#1a1a2e; font-weight:bold; }
 
-/* ── Online Panel ── */
-#onlinePanel {
-  width:min(400px,96vw); margin-bottom:8px; background:#16213e;
-  border:2px solid #a78bfa; border-radius:10px; padding:12px 14px;
-  display:none; flex-direction:column; gap:8px; align-items:center;
-}
-.ol-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; width:100%; }
-.ol-divider { color:#555; font-size:.78rem; }
-.ol-action-btn {
-  padding:7px 16px; border-radius:8px; border:2px solid #a78bfa;
-  background:transparent; color:#a78bfa; font-size:.85rem; cursor:pointer; transition:.15s;
-}
-.ol-action-btn:hover { background:#a78bfa22; }
-.ol-action-btn.primary { background:#a78bfa; color:#1a1a2e; font-weight:bold; }
-.ol-action-btn.primary:hover { opacity:.85; }
-.ol-action-btn.danger { border-color:#e94560; color:#e94560; }
-.ol-action-btn.danger:hover { background:#e9456022; }
-.ol-action-btn:disabled { opacity:.4; cursor:default; }
-#ol-code-in {
-  background:#0f1929; border:2px solid #a78bfa; color:#eee;
-  border-radius:6px; padding:5px 10px; font-size:1rem; font-weight:bold;
-  width:110px; letter-spacing:3px; text-transform:uppercase; text-align:center;
-}
-#ol-code-in::placeholder { letter-spacing:1px; font-size:.78rem; font-weight:normal; }
-#ol-code-display { font-size:1.8rem; font-weight:bold; letter-spacing:8px; color:#a78bfa; }
-#ol-dots { display:flex; gap:6px; font-size:1.4rem; }
-#ol-connected-text { color:#aaa; font-size:.82rem; }
-#ol-status-text { color:#aaa; font-size:.85rem; text-align:center; }
-#ol-countdown { font-size:3rem; font-weight:bold; color:#f5a623; animation:pulse-c .9s ease-in-out infinite; }
-@keyframes pulse-c { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
-#ol-error { color:#e94560; font-size:.8rem; text-align:center; }
-.ol-badge { font-size:.78rem; padding:3px 10px; border-radius:12px; background:#0f1929; border:1px solid #a78bfa55; color:#a78bfa; }
-.ol-you { border-color:#4ecca355; color:#4ecca3; }
-
-/* ── Canvas ── */
 #canvas-wrap { position:relative; }
 canvas { border:3px solid #4ecca3; border-radius:6px; box-shadow:0 0 30px #4ecca355; background:#0f3460; display:block; }
-#overlay {
-  position:absolute; inset:0; background:rgba(15,52,96,0.88);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  border-radius:4px; gap:10px; pointer-events:none;
-}
-#overlay h2 { color:#4ecca3; font-size:1.5rem; letter-spacing:2px; }
-#overlay p { color:#f5a623; font-size:.95rem; text-align:center; padding:0 20px; }
-#overlay .sub { color:#aaa; font-size:.82rem; }
-#msg { margin-top:8px; font-size:.9rem; color:#f5a623; min-height:1.4em; text-align:center; max-width:min(400px,96vw); }
+#overlay { position:absolute; inset:0; background:rgba(15,52,96,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:4px; gap:8px; pointer-events:none; }
+#overlay h2 { color:#4ecca3; font-size:1.4rem; letter-spacing:2px; }
+#overlay p { color:#f5a623; font-size:.9rem; text-align:center; padding:0 16px; }
+#overlay .sub { color:#aaa; font-size:.78rem; }
+#msg { margin-top:6px; font-size:.88rem; color:#f5a623; min-height:1.3em; text-align:center; max-width:min(420px,96vw); }
 
-/* ── Control pads ── */
-#ctrl1p { margin-top:8px; display:grid; grid-template-columns:repeat(3,44px); grid-template-rows:repeat(2,44px); gap:5px; }
-#ctrl2p { margin-top:8px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
-.ctrl-pad { display:grid; grid-template-columns:repeat(3,40px); grid-template-rows:repeat(2,40px); gap:4px; }
-.ctrl-pad .pad-label { grid-column:1/-1; text-align:center; font-size:.72rem; color:#aaa; margin-bottom:2px; }
-#ctrl-online { margin-top:8px; display:none; flex-direction:column; align-items:center; gap:4px; }
-#ctrl-online .pad-label { font-size:.75rem; color:#a78bfa; }
-#ctrl-online-pad { display:grid; grid-template-columns:repeat(3,44px); grid-template-rows:repeat(2,44px); gap:5px; }
-.ctrl-btn {
-  background:#16213e; border:2px solid #4ecca3; border-radius:8px;
-  color:#4ecca3; font-size:1.1rem; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; user-select:none; transition:.1s;
-}
-.ctrl-btn.p2  { border-color:#e94560; color:#e94560; }
-.ctrl-btn.p3  { border-color:#f5a623; color:#f5a623; }
-.ctrl-btn.p4  { border-color:#a78bfa; color:#a78bfa; }
-.ctrl-btn.ol  { border-color:#a78bfa; color:#a78bfa; }
-.ctrl-btn:active  { background:#4ecca3; color:#1a1a2e; }
+/* Controls */
+#ctrl-wrap { margin-top:8px; display:flex; gap:16px; align-items:flex-start; justify-content:center; flex-wrap:wrap; }
+.ctrl-section { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.ctrl-section .clabel { font-size:.7rem; color:#aaa; }
+.ctrl-grid { display:grid; grid-template-columns:repeat(3,40px); grid-template-rows:repeat(2,40px); gap:4px; }
+.ctrl-btn { background:#16213e; border:2px solid #4ecca3; border-radius:8px; color:#4ecca3; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; user-select:none; transition:.1s; }
+.ctrl-btn.p2 { border-color:#e94560; color:#e94560; }
+.ctrl-btn.shoot { border-color:#f5a623; color:#f5a623; width:88px; height:36px; font-size:.8rem; font-weight:bold; border-radius:8px; }
+.ctrl-btn.shoot.p2s { border-color:#e94560; color:#e94560; }
+.ctrl-btn:active { background:#4ecca3; color:#1a1a2e; }
 .ctrl-btn.p2:active { background:#e94560; color:#fff; }
-.ctrl-btn.p3:active { background:#f5a623; color:#1a1a2e; }
-.ctrl-btn.p4:active { background:#a78bfa; color:#1a1a2e; }
-.ctrl-btn.ol:active { background:#a78bfa; color:#1a1a2e; }
-#btn-up    {grid-column:2;grid-row:1} #btn-left  {grid-column:1;grid-row:2}
-#btn-down  {grid-column:2;grid-row:2} #btn-right {grid-column:3;grid-row:2}
-#btn2p-up  {grid-column:2;grid-row:1} #btn2p-left  {grid-column:1;grid-row:2}
-#btn2p-down{grid-column:2;grid-row:2} #btn2p-right {grid-column:3;grid-row:2}
-#btn2p2-up {grid-column:2;grid-row:1} #btn2p2-left  {grid-column:1;grid-row:2}
-#btn2p2-down{grid-column:2;grid-row:2}#btn2p2-right {grid-column:3;grid-row:2}
-#btnol-up  {grid-column:2;grid-row:1} #btnol-left  {grid-column:1;grid-row:2}
-#btnol-down{grid-column:2;grid-row:2} #btnol-right {grid-column:3;grid-row:2}
+.ctrl-btn.shoot:active { background:#f5a623; color:#1a1a2e; }
+.ctrl-btn.shoot.p2s:active { background:#e94560; color:#fff; }
+#cbu {grid-column:2;grid-row:1} #cbl {grid-column:1;grid-row:2} #cbd {grid-column:2;grid-row:2} #cbr {grid-column:3;grid-row:2}
+#cb2u{grid-column:2;grid-row:1} #cb2l{grid-column:1;grid-row:2} #cb2d{grid-column:2;grid-row:2} #cb2r{grid-column:3;grid-row:2}
 
-#startBtn {
-  margin-top:10px; padding:9px 28px; background:#4ecca3; color:#1a1a2e;
-  border:none; border-radius:8px; font-size:1rem; font-weight:bold;
-  cursor:pointer; letter-spacing:1px; transition:opacity .2s;
-}
+#startBtn { margin-top:8px; padding:8px 26px; background:#4ecca3; color:#1a1a2e; border:none; border-radius:8px; font-size:.95rem; font-weight:bold; cursor:pointer; letter-spacing:1px; transition:opacity .2s; }
 #startBtn:hover { opacity:.85; }
-#keys2p { font-size:.72rem; color:#888; margin-top:4px; text-align:center; line-height:1.6; }
+#hint { font-size:.7rem; color:#666; margin-top:4px; text-align:center; }
 </style>
 </head>
 <body>
 <h1>🐍 SNAKE</h1>
+<div id="subtitle">💥 SHOOTER EDITION</div>
 
 <div id="modeBar">
   <button class="mode-btn active" id="btn1p">1 Player</button>
   <button class="mode-btn" id="btn2p-mode">1v1 Local</button>
-  <button class="mode-btn online-btn" id="btn-online">🌐 Online</button>
 </div>
 
-<!-- 1P scoreboard -->
+<!-- 1P HUD -->
 <div id="sb1p">
   <div class="score-box">Score<span id="score">0</span></div>
   <div class="score-box">Best<span id="best">0</span></div>
   <div class="score-box">Level<span id="level">1</span></div>
+  <div class="score-box ammo-box">Ammo<span id="ammo">3</span></div>
+  <div class="score-box cool-box">Cooldown<span id="cooldown">Ready</span></div>
 </div>
-<!-- 2P local scoreboard -->
+<!-- 2P HUD -->
 <div id="sb2p" style="display:none">
   <div class="p-score p1-side">
     <div class="name">🟢 P1</div>
-    <div class="pts" id="p1score">0</div>
-    <div style="font-size:.7rem;color:#aaa">wins</div>
+    <div class="pts" id="p1wins">0</div>
+    <div class="p-ammo">🔫 <span id="p1ammo">3</span> ammo</div>
   </div>
   <div class="vs-badge">VS</div>
   <div class="p-score p2-side">
     <div class="name">P2 🔴</div>
-    <div class="pts" id="p2score">0</div>
-    <div style="font-size:.7rem;color:#aaa">wins</div>
+    <div class="pts" id="p2wins">0</div>
+    <div class="p-ammo">🔫 <span id="p2ammo">3</span> ammo</div>
   </div>
 </div>
-<!-- Online scoreboard (dynamic) -->
-<div id="sb-online"></div>
 
-<!-- Options -->
 <div id="options">
-  <div class="opt-group">
-    <label>Board</label>
-    <select id="boardSel">
-      <option value="small">Small 20×20</option>
-      <option value="medium">Medium 30×30</option>
-      <option value="large">Large 40×40</option>
-    </select>
+  <div class="opt-group"><label>Difficulty</label>
+    <select id="diffSel"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="insane">Insane</option></select>
   </div>
-  <div class="opt-group">
-    <label>Difficulty</label>
-    <select id="diffSel">
-      <option value="easy">Easy</option>
-      <option value="medium" selected>Medium</option>
-      <option value="hard">Hard</option>
-      <option value="insane">Insane</option>
-    </select>
-  </div>
-  <div class="opt-group">
-    <label>Walls</label>
-    <button class="toggle-btn on" id="wallsBtn">ON</button>
-  </div>
-  <div class="opt-group">
-    <label>Obstacles</label>
-    <button class="toggle-btn" id="obstBtn">OFF</button>
-  </div>
-  <div class="opt-group">
-    <label>Sound</label>
-    <button class="toggle-btn on" id="soundBtn">ON</button>
-  </div>
-</div>
-
-<!-- Online Panel -->
-<div id="onlinePanel">
-  <!-- Setup -->
-  <div id="ol-setup">
-    <div class="ol-row">
-      <div class="opt-group" style="margin:0">
-        <label>Players</label>
-        <select id="ol-max-players" style="border-color:#a78bfa">
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-      </div>
-      <button class="ol-action-btn primary" id="ol-create-btn">Create Room</button>
-    </div>
-    <div class="ol-divider">— or join with a code —</div>
-    <div class="ol-row">
-      <input id="ol-code-in" maxlength="4" placeholder="Room code">
-      <button class="ol-action-btn" id="ol-join-btn">Join Room</button>
-    </div>
-    <div id="ol-error"></div>
-  </div>
-  <!-- Waiting -->
-  <div id="ol-waiting" style="display:none; flex-direction:column; align-items:center; gap:6px; width:100%">
-    <div style="color:#aaa;font-size:.78rem">Share this code with friends:</div>
-    <div id="ol-code-display"></div>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <div id="ol-dots"></div>
-      <div id="ol-connected-text"></div>
-    </div>
-    <div id="ol-status-text"></div>
-    <div id="ol-countdown" style="display:none"></div>
-    <div class="ol-row">
-      <button class="ol-action-btn primary" id="ol-start-btn" style="display:none">▶ Start Now</button>
-      <button class="ol-action-btn danger" id="ol-cancel-btn">Cancel</button>
-    </div>
-  </div>
-  <!-- In game -->
-  <div id="ol-ingame" style="display:none;flex-direction:column;align-items:center;gap:6px;width:100%">
-    <div class="ol-row" style="justify-content:space-between">
-      <span class="ol-badge">Room: <strong id="ol-code-ingame"></strong></span>
-      <span class="ol-badge ol-you" id="ol-player-label"></span>
-      <button class="ol-action-btn danger" id="ol-leave-btn" style="padding:3px 10px;font-size:.78rem">Leave</button>
-    </div>
-    <button class="ol-action-btn primary" id="ol-rematch-btn" style="display:none">🔄 Rematch</button>
-  </div>
+  <div class="opt-group"><label>Walls</label><button class="toggle-btn on" id="wallsBtn">ON</button></div>
+  <div class="opt-group"><label>Obstacles</label><button class="toggle-btn" id="obstBtn">OFF</button></div>
+  <div class="opt-group"><label>Bounce</label><button class="toggle-btn" id="bounceBtn">OFF</button></div>
+  <div class="opt-group"><label>Sound</label><button class="toggle-btn on" id="soundBtn">ON</button></div>
 </div>
 
 <div id="canvas-wrap">
   <canvas id="c" width="400" height="400"></canvas>
   <div id="overlay">
-    <h2 id="ov-title">🐍 SNAKE</h2>
-    <p id="ov-msg">Configure options above</p>
-    <p class="sub" id="ov-sub">then press Start or Space</p>
+    <h2 id="ov-title">🐍 SNAKE SHOOTER</h2>
+    <p id="ov-msg">Eat food to gain ammo • Shoot to chop enemies</p>
+    <p class="sub" id="ov-sub">Press Start or Space to play</p>
   </div>
 </div>
-
 <div id="msg"></div>
 
-<!-- 1P d-pad -->
-<div id="ctrl1p">
-  <button class="ctrl-btn" id="btn-up">▲</button>
-  <button class="ctrl-btn" id="btn-left">◀</button>
-  <button class="ctrl-btn" id="btn-down">▼</button>
-  <button class="ctrl-btn" id="btn-right">▶</button>
-</div>
-<!-- 2P d-pads -->
-<div id="ctrl2p" style="display:none">
-  <div class="ctrl-pad">
-    <div class="pad-label" style="color:#4ecca3">🟢 P1 (WASD)</div>
-    <button class="ctrl-btn" id="btn2p-up">▲</button>
-    <button class="ctrl-btn" id="btn2p-left">◀</button>
-    <button class="ctrl-btn" id="btn2p-down">▼</button>
-    <button class="ctrl-btn" id="btn2p-right">▶</button>
+<div id="ctrl-wrap">
+  <!-- 1P -->
+  <div id="ctrl1p" class="ctrl-section">
+    <div class="clabel">Move</div>
+    <div class="ctrl-grid">
+      <button class="ctrl-btn" id="cbu">▲</button>
+      <button class="ctrl-btn" id="cbl">◀</button>
+      <button class="ctrl-btn" id="cbd">▼</button>
+      <button class="ctrl-btn" id="cbr">▶</button>
+    </div>
+    <button class="ctrl-btn shoot" id="cbshoot">🔫 SHOOT</button>
   </div>
-  <div class="ctrl-pad">
-    <div class="pad-label" style="color:#e94560">P2 🔴 (Arrows)</div>
-    <button class="ctrl-btn p2" id="btn2p2-up">▲</button>
-    <button class="ctrl-btn p2" id="btn2p2-left">◀</button>
-    <button class="ctrl-btn p2" id="btn2p2-down">▼</button>
-    <button class="ctrl-btn p2" id="btn2p2-right">▶</button>
-  </div>
-</div>
-<div id="keys2p" style="display:none">
-  🟢 P1: <b>WASD</b> &nbsp;|&nbsp; 🔴 P2: <b>Arrow Keys</b>
-</div>
-<!-- Online single d-pad -->
-<div id="ctrl-online">
-  <div class="pad-label" id="ol-dpad-label">Your controls</div>
-  <div id="ctrl-online-pad">
-    <button class="ctrl-btn ol" id="btnol-up">▲</button>
-    <button class="ctrl-btn ol" id="btnol-left">◀</button>
-    <button class="ctrl-btn ol" id="btnol-down">▼</button>
-    <button class="ctrl-btn ol" id="btnol-right">▶</button>
+  <!-- 2P -->
+  <div id="ctrl2p" style="display:none; gap:24px;" class="ctrl-section">
+    <div style="display:flex;gap:16px">
+      <div class="ctrl-section">
+        <div class="clabel" style="color:#4ecca3">🟢 P1 (WASD+F)</div>
+        <div class="ctrl-grid">
+          <button class="ctrl-btn" id="cb2u">▲</button>
+          <button class="ctrl-btn" id="cb2l">◀</button>
+          <button class="ctrl-btn" id="cb2d">▼</button>
+          <button class="ctrl-btn" id="cb2r">▶</button>
+        </div>
+        <button class="ctrl-btn shoot" id="cb2shoot">🔫 SHOOT</button>
+      </div>
+      <div class="ctrl-section">
+        <div class="clabel" style="color:#e94560">P2 🔴 (Arrows+/)</div>
+        <div class="ctrl-grid">
+          <button class="ctrl-btn p2" id="cb3u">▲</button>
+          <button class="ctrl-btn p2" id="cb3l">◀</button>
+          <button class="ctrl-btn p2" id="cb3d">▼</button>
+          <button class="ctrl-btn p2" id="cb3r">▶</button>
+        </div>
+        <button class="ctrl-btn shoot p2s" id="cb3shoot">🔫 SHOOT</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <button id="startBtn">START</button>
+<div id="hint">1P: Arrow keys / WASD to move • Space or F to shoot<br>2P: P1=WASD+F • P2=Arrows+/</div>
 
 <script>
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // AUDIO
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let actx = null;
 function getACtx(){ if(!actx) actx=new AudioCtx(); return actx; }
@@ -319,196 +180,244 @@ function playTone(freq,type,dur,vol=0.3){
     g.gain.setValueAtTime(vol,a.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);
     o.start(); o.stop(a.currentTime+dur);
-  } catch(e){}
+  }catch(e){}
 }
-function playEat(p2=false){ const f=p2?400:523; playTone(f,'sine',.08); setTimeout(()=>playTone(f*1.25,'sine',.1),60); }
-function playDie(){ playTone(200,'sawtooth',.08);setTimeout(()=>playTone(150,'sawtooth',.15),80);setTimeout(()=>playTone(100,'sawtooth',.3),200); }
+function playEat()  { playTone(523,'sine',.08); setTimeout(()=>playTone(659,'sine',.1),60); }
+function playDie()  { playTone(200,'sawtooth',.08);setTimeout(()=>playTone(150,'sawtooth',.15),80);setTimeout(()=>playTone(100,'sawtooth',.3),200); }
+function playShoot(){ playTone(880,'square',.04,.25); setTimeout(()=>playTone(440,'square',.04,.15),40); }
+function playHit()  { playTone(300,'sawtooth',.05,.4); setTimeout(()=>playTone(200,'sawtooth',.08,.3),50); }
+function playBounce(){ playTone(600,'sine',.06,.2); }
+function playNoAmmo(){ playTone(150,'square',.05,.2); }
+function playWin()  { [659,784,880,1047].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.2),i*100)); }
 function playLevel(){ [523,587,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.15),i*80)); }
-function playWin(){ [659,784,880,1047].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',.2),i*100)); }
-function playBeep(){ playTone(660,'sine',.1,.4); }
 
-// ══════════════════════════════════════════════════════
-// BOARD & CONSTANTS
-// ══════════════════════════════════════════════════════
-const BOARD_SIZES = { small:{cols:20,rows:20}, medium:{cols:30,rows:30}, large:{cols:40,rows:40} };
-const TILE = 20;
-let COLS = 20, ROWS = 20;
+// ══════════════════════════════════════════════════
+// CONSTANTS & STATE
+// ══════════════════════════════════════════════════
+const TILE=20, COLS=20, ROWS=20;
+const NUM_FOODS = 5;
+const AMMO_START = 3;
+const SHOOT_COOLDOWN = 1500; // ms
+const MIN_LENGTH_TO_SHOOT = 5;
+const SHOOT_COST = 1; // segments lost per shot
+const BULLET_SPEED = 2; // tiles per game tick
+const FOOD_COLORS = ['#f5a623','#ff69b4','#4fc3f7','#81c784','#ffeb3b'];
 
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 
-const PLAYER_COLORS = ['#4ecca3','#e94560','#f5a623','#a78bfa'];
-const PLAYER_BODY_FN = [
-  r => `hsl(${160-r*40},70%,${55-r*15}%)`,
-  r => `hsl(${345+r*20},${70-r*20}%,${50-r*15}%)`,
-  r => `hsl(${35-r*15},${80-r*20}%,${55-r*15}%)`,
-  r => `hsl(${270+r*20},${60-r*20}%,${55-r*15}%)`,
-];
+let wallsOn=true, obstOn=false, bounceOn=false, soundOn=true, mode='1p';
+let running=false, gameLoop=null;
 
-function applyBoardSize(size) {
-  const bs = BOARD_SIZES[size] || BOARD_SIZES.small;
-  COLS = bs.cols; ROWS = bs.rows;
-  canvas.width  = COLS * TILE;
-  canvas.height = ROWS * TILE;
-  fitCanvas();
-}
+const DIFF={easy:{base:220,dec:8},medium:{base:180,dec:12},hard:{base:120,dec:15},insane:{base:70,dec:20}};
+function getDiff(){ return DIFF[document.getElementById('diffSel').value]; }
+function getSpeed(sc=0){ const d=getDiff(),lvl=Math.floor(sc/5); return Math.max(60,d.base-lvl*d.dec); }
 
-function fitCanvas() {
-  const maxPx = Math.min(window.innerWidth - 32, 640);
-  const nat = COLS * TILE;
-  const scale = Math.min(1, maxPx / nat);
-  canvas.style.width  = Math.round(nat * scale) + 'px';
-  canvas.style.height = Math.round(nat * scale) + 'px';
-}
-window.addEventListener('resize', fitCanvas);
-
-// ══════════════════════════════════════════════════════
-// SETTINGS TOGGLES
-// ══════════════════════════════════════════════════════
-let wallsOn=true, obstOn=false, soundOn=true, mode='1p';
-
-function makeToggle(id, init, cb){
-  let v=init;
-  const b=document.getElementById(id);
+// ── Toggles ──────────────────────────────────────
+function makeToggle(id,init,cb){
+  let v=init; const b=document.getElementById(id);
   b.classList.toggle('on',v); b.textContent=v?'ON':'OFF';
   b.addEventListener('click',()=>{ v=!v; b.classList.toggle('on',v); b.textContent=v?'ON':'OFF'; cb(v); });
-  return () => v;
 }
-makeToggle('wallsBtn',true,v=>{ wallsOn=v; olSyncSettings(); });
-makeToggle('obstBtn',false,v=>{ obstOn=v; olSyncSettings(); });
+makeToggle('wallsBtn',true,v=>wallsOn=v);
+makeToggle('obstBtn',false,v=>obstOn=v);
+makeToggle('bounceBtn',false,v=>bounceOn=v);
 makeToggle('soundBtn',true,v=>soundOn=v);
 
-function setToggleUI(id, val) {
-  const b = document.getElementById(id);
-  b.classList.toggle('on', val); b.textContent = val ? 'ON' : 'OFF';
-}
-
-document.getElementById('boardSel').addEventListener('change', function(){
-  applyBoardSize(this.value);
-  olSyncSettings();
-});
-document.getElementById('diffSel').addEventListener('change', () => olSyncSettings());
-
-// ══════════════════════════════════════════════════════
-// MODE SWITCHING
-// ══════════════════════════════════════════════════════
+// ── Mode switching ────────────────────────────────
 document.getElementById('btn1p').addEventListener('click',()=>setMode('1p'));
 document.getElementById('btn2p-mode').addEventListener('click',()=>setMode('2p'));
-document.getElementById('btn-online').addEventListener('click',()=>setMode('online'));
-
-function setMode(m) {
-  if (mode==='online' && m!=='online') olDisconnect();
-  mode = m;
-  clearInterval(gameLoop); running = false;
-
-  document.getElementById('btn1p').classList.toggle('active', m==='1p');
-  document.getElementById('btn2p-mode').classList.toggle('active', m==='2p');
-  document.getElementById('btn-online').classList.toggle('active', m==='online');
-
-  document.getElementById('sb1p').style.display    = m==='1p'    ? 'flex'  : 'none';
-  document.getElementById('sb2p').style.display    = m==='2p'    ? 'flex'  : 'none';
-  document.getElementById('sb-online').style.display = m==='online' ? 'flex' : 'none';
-
-  document.getElementById('ctrl1p').style.display  = m==='1p'    ? 'grid'  : 'none';
-  document.getElementById('ctrl2p').style.display  = m==='2p'    ? 'flex'  : 'none';
-  document.getElementById('keys2p').style.display  = m==='2p'    ? 'block' : 'none';
-  document.getElementById('ctrl-online').style.display = m==='online' ? 'flex' : 'none';
-  document.getElementById('onlinePanel').style.display = m==='online' ? 'flex' : 'none';
-  document.getElementById('startBtn').style.display    = m!=='online' ? 'block' : 'none';
-  document.getElementById('msg').textContent = '';
-
-  if (m==='1p') {
-    document.getElementById('ov-msg').textContent='Configure options above';
-    document.getElementById('ov-sub').textContent='then press Start or Space';
-    showOverlay('🐍 SNAKE');
-  } else if (m==='2p') {
-    document.getElementById('ov-msg').textContent='P1: WASD  |  P2: Arrow Keys';
-    document.getElementById('ov-sub').textContent='Press Start or Space to play';
-    showOverlay('🐍 1v1 LOCAL');
-    p1wins=0; p2wins=0;
-    document.getElementById('p1score').textContent='0';
-    document.getElementById('p2score').textContent='0';
-  } else {
-    olShowSetup();
-    showOverlay('🐍 ONLINE');
-    document.getElementById('ov-msg').textContent='Create or join a room below';
-    document.getElementById('ov-sub').textContent='';
-  }
+function setMode(m){
+  mode=m; clearInterval(gameLoop); running=false;
+  document.getElementById('btn1p').classList.toggle('active',m==='1p');
+  document.getElementById('btn2p-mode').classList.toggle('active',m==='2p');
+  document.getElementById('sb1p').style.display=m==='1p'?'flex':'none';
+  document.getElementById('sb2p').style.display=m==='2p'?'flex':'none';
+  document.getElementById('ctrl1p').style.display=m==='1p'?'flex':'none';
+  document.getElementById('ctrl2p').style.display=m==='2p'?'flex':'none';
+  document.getElementById('msg').textContent='';
+  if(m==='2p'){ p1wins=0; p2wins=0; document.getElementById('p1wins').textContent='0'; document.getElementById('p2wins').textContent='0'; }
+  showOverlay(m==='1p'?'🐍 SNAKE SHOOTER':'💥 1v1 SHOOTER');
+  document.getElementById('ov-msg').textContent='Eat food for ammo • Shoot to chop!';
+  document.getElementById('ov-sub').textContent='Press Start or Space to play';
 }
 
-// ══════════════════════════════════════════════════════
-// GAME STATE
-// ══════════════════════════════════════════════════════
-const DIFF = { easy:{base:220,dec:8}, medium:{base:180,dec:12}, hard:{base:120,dec:15}, insane:{base:70,dec:20} };
-let snake,dir,nextDir;
-let s1,d1,nd1,s2,d2,nd2;
-let food,food2,obstacles=[];
-let score,best=0,gameLoop,running=false;
-let p1wins=0,p2wins=0;
+// ══════════════════════════════════════════════════
+// GAME OBJECTS
+// ══════════════════════════════════════════════════
+let snake, dir, nextDir, ammo, lastShot, score, best=0;
+let s1,d1,nd1,ammo1,lastShot1;
+let s2,d2,nd2,ammo2,lastShot2;
+let p1wins=0, p2wins=0;
+let foods=[], obstacles=[], bullets=[];
 
-function getDiff(){ return DIFF[document.getElementById('diffSel').value]; }
-function getSpeed(sc=0){ const d=getDiff(),lvl=Math.floor(sc/5); return Math.max(50,d.base-lvl*d.dec); }
-
-function spawnObstacles(n){
-  for(let i=0;i<n;i++){
-    let pos,tries=0;
-    do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; tries++; }
-    while(tries<50&&(
-      (s1&&s1.some(s=>s.x===pos.x&&s.y===pos.y))||
-      (s2&&s2.some(s=>s.x===pos.x&&s.y===pos.y))||
-      obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||
-      (pos.x>=Math.floor(COLS*0.3)&&pos.x<=Math.floor(COLS*0.7)&&
-       pos.y>=Math.floor(ROWS*0.3)&&pos.y<=Math.floor(ROWS*0.7))
-    ));
-    if(tries<50) obstacles.push(pos);
-  }
+// Bullet: {x, y, dx, dy, owner, trail:[{x,y}]}
+function makeBullet(head, d, owner){
+  return { x:head.x+d.x, y:head.y+d.y, dx:d.x, dy:d.y, owner, trail:[], age:0 };
 }
 
 function placeFood(exclude=[]){
-  let pos;
-  do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; }
-  while(exclude.some(e=>e&&e.x===pos.x&&e.y===pos.y)||obstacles.some(o=>o.x===pos.x&&o.y===pos.y));
+  let pos, tries=0;
+  do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; tries++; }
+  while(tries<300&&(
+    exclude.some(e=>e&&e.x===pos.x&&e.y===pos.y)||
+    obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||
+    foods.some(f=>f.x===pos.x&&f.y===pos.y)
+  ));
   return pos;
 }
 
-// ══════════════════════════════════════════════════════
-// LOCAL GAME INIT
-// ══════════════════════════════════════════════════════
-function init(){
-  if(mode==='online') return;
-  applyBoardSize(document.getElementById('boardSel').value);
-  hideOverlay();
-  obstacles=[];
-  running=true;
-  clearInterval(gameLoop);
-  document.getElementById('msg').textContent='';
-
-  const cx=Math.floor(COLS/2), cy=Math.floor(ROWS/2);
-  const q1x=Math.floor(COLS*0.25), q3x=Math.floor(COLS*0.75);
-
-  if(mode==='1p'){
-    snake=[{x:cx,y:cy},{x:cx-1,y:cy},{x:cx-2,y:cy}];
-    dir={x:1,y:0}; nextDir={x:1,y:0};
-    score=0;
-    if(obstOn) spawnObstacles(5);
-    food=placeFood([...snake]);
-    updateUI1p();
-    gameLoop=setInterval(step1p, getSpeed(0));
-  } else {
-    s1=[{x:q1x,y:cy},{x:q1x-1,y:cy},{x:q1x-2,y:cy}];
-    d1={x:1,y:0}; nd1={x:1,y:0};
-    s2=[{x:q3x,y:cy},{x:q3x+1,y:cy},{x:q3x+2,y:cy}];
-    d2={x:-1,y:0}; nd2={x:-1,y:0};
-    if(obstOn) spawnObstacles(4);
-    food=placeFood([...s1,...s2]);
-    food2=placeFood([...s1,...s2,food]);
-    gameLoop=setInterval(step2p, getSpeed(0));
+function fillFoods(snakeCells=[]){
+  while(foods.length < NUM_FOODS){
+    foods.push(placeFood(snakeCells));
   }
 }
 
-// ══════════════════════════════════════════════════════
+function spawnObstacles(n, snakeCells=[]){
+  for(let i=0;i<n;i++){
+    let pos,tries=0;
+    do{ pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}; tries++; }
+    while(tries<80&&(
+      snakeCells.some(s=>s.x===pos.x&&s.y===pos.y)||
+      obstacles.some(o=>o.x===pos.x&&o.y===pos.y)||
+      foods.some(f=>f.x===pos.x&&f.y===pos.y)||
+      (pos.x>=7&&pos.x<=12&&pos.y>=7&&pos.y<=12)
+    ));
+    if(tries<80) obstacles.push(pos);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+function init(){
+  hideOverlay(); running=true; clearInterval(gameLoop);
+  document.getElementById('msg').textContent='';
+  foods=[]; obstacles=[]; bullets=[];
+
+  if(mode==='1p'){
+    snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+    dir={x:1,y:0}; nextDir={x:1,y:0};
+    ammo=AMMO_START; lastShot=0; score=0;
+    if(obstOn) spawnObstacles(5,[...snake]);
+    fillFoods([...snake]);
+    updateUI1p();
+    gameLoop=setInterval(step1p,getSpeed(0));
+  } else {
+    s1=[{x:5,y:10},{x:4,y:10},{x:3,y:10}];
+    d1={x:1,y:0}; nd1={x:1,y:0}; ammo1=AMMO_START; lastShot1=0;
+    s2=[{x:15,y:10},{x:16,y:10},{x:17,y:10}];
+    d2={x:-1,y:0}; nd2={x:-1,y:0}; ammo2=AMMO_START; lastShot2=0;
+    if(obstOn) spawnObstacles(4,[...s1,...s2]);
+    fillFoods([...s1,...s2]);
+    updateUI2p();
+    gameLoop=setInterval(step2p,getSpeed(0));
+  }
+}
+
+// ══════════════════════════════════════════════════
+// SHOOTING
+// ══════════════════════════════════════════════════
+function tryShoot1p(){
+  const now=Date.now();
+  if(ammo<=0){ playNoAmmo(); return; }
+  if(now-lastShot<SHOOT_COOLDOWN){ playNoAmmo(); return; }
+  if(snake.length<=MIN_LENGTH_TO_SHOOT){ playNoAmmo(); return; }
+  // Cost: lose tail segment
+  for(let i=0;i<SHOOT_COST;i++) if(snake.length>3) snake.pop();
+  ammo--;
+  lastShot=now;
+  bullets.push(makeBullet(snake[0],dir,1));
+  playShoot();
+  updateUI1p();
+}
+
+function tryShoot(player){
+  const now=Date.now();
+  const sn=player===1?s1:s2;
+  const d=player===1?d1:d2;
+  let am=player===1?ammo1:ammo2;
+  let ls=player===1?lastShot1:lastShot2;
+  if(am<=0||now-ls<SHOOT_COOLDOWN||sn.length<=MIN_LENGTH_TO_SHOOT){ playNoAmmo(); return; }
+  for(let i=0;i<SHOOT_COST;i++) if(sn.length>3) sn.pop();
+  am--;
+  if(player===1){ammo1=am;lastShot1=now;}else{ammo2=am;lastShot2=now;}
+  bullets.push(makeBullet(sn[0],d,player));
+  playShoot();
+  updateUI2p();
+}
+
+// ══════════════════════════════════════════════════
+// BULLET STEP (shared)
+// ══════════════════════════════════════════════════
+function stepBullets(allSnakes){
+  const toRemove=new Set();
+  const hits={}; // snakeIdx -> chopAt segment index
+
+  bullets.forEach((b,bi)=>{
+    b.trail.push({x:b.x,y:b.y});
+    if(b.trail.length>4) b.trail.shift();
+    b.age++;
+
+    // Move bullet BULLET_SPEED tiles per tick
+    for(let step=0;step<BULLET_SPEED;step++){
+      let nx=b.x+b.dx, ny=b.y+b.dy;
+
+      // Wall handling
+      if(nx<0||nx>=COLS||ny<0||ny>=ROWS){
+        if(bounceOn){
+          if(nx<0||nx>=COLS) b.dx=-b.dx;
+          if(ny<0||ny>=ROWS) b.dy=-b.dy;
+          nx=b.x+b.dx; ny=b.y+b.dy;
+          playBounce();
+        } else { toRemove.add(bi); break; }
+      }
+
+      // Obstacle hit
+      if(obstacles.some(o=>o.x===nx&&o.y===ny)){ toRemove.add(bi); break; }
+
+      b.x=nx; b.y=ny;
+
+      // Snake hit
+      allSnakes.forEach((sn,si)=>{
+        if(!sn) return;
+        const body=Array.isArray(sn)?sn:sn.body;
+        const owner=b.owner;
+        // Can hit any snake (including self if head-on, but skip own head)
+        body.forEach((seg,segIdx)=>{
+          if(b.x===seg.x&&b.y===seg.y){
+            if(!(si===owner-1&&segIdx===0)){ // don't remove own head
+              if(hits[si]===undefined||segIdx<hits[si]) hits[si]=segIdx;
+              toRemove.add(bi);
+            }
+          }
+        });
+      });
+    }
+  });
+
+  // Apply hits
+  Object.entries(hits).forEach(([si,chopIdx])=>{
+    const idx=parseInt(si);
+    const sn=allSnakes[idx];
+    if(!sn) return;
+    playHit();
+    if(chopIdx===0){
+      // Head hit = kill (handled by caller returning null)
+      allSnakes[idx]=null;
+    } else {
+      const body=Array.isArray(sn)?sn:sn.body;
+      body.splice(chopIdx); // chop from that segment onward
+    }
+  });
+
+  bullets=bullets.filter((_,i)=>!toRemove.has(i));
+  return allSnakes;
+}
+
+// ══════════════════════════════════════════════════
 // 1P STEP
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function step1p(){
   dir=nextDir;
   let nx=snake[0].x+dir.x, ny=snake[0].y+dir.y;
@@ -517,47 +426,81 @@ function step1p(){
   const head={x:nx,y:ny};
   if(snake.some(s=>s.x===head.x&&s.y===head.y)||obstacles.some(o=>o.x===head.x&&o.y===head.y)){playDie();endGame1p();return;}
   snake.unshift(head);
-  if(head.x===food.x&&head.y===food.y){
+
+  // Food check
+  const fi=foods.findIndex(f=>f.x===head.x&&f.y===head.y);
+  if(fi>=0){
     score++; if(score>best)best=score;
-    playEat();
+    ammo++; playEat();
     const pl=Math.floor((score-1)/5),nl=Math.floor(score/5);
-    if(nl>pl){playLevel();if(obstOn)spawnObstacles(2);}
-    updateUI1p(); food=placeFood([...snake]);
+    if(nl>pl){playLevel();if(obstOn)spawnObstacles(2,[...snake]);}
+    foods.splice(fi,1);
+    fillFoods([...snake]);
     clearInterval(gameLoop); gameLoop=setInterval(step1p,getSpeed(score));
   } else snake.pop();
+
+  // Bullets
+  const snakes=[snake];
+  stepBullets(snakes);
+  if(!snakes[0]){playDie();endGame1p();return;}
+  snake=snakes[0];
+
+  updateUI1p();
   draw();
 }
+
 function endGame1p(){
   clearInterval(gameLoop); running=false;
   document.getElementById('msg').textContent=`💀 Game Over! Score: ${score} — Press Start or Space to retry.`;
   flashCanvas('#e94560');
 }
+
 function updateUI1p(){
   document.getElementById('score').textContent=score;
   document.getElementById('best').textContent=best;
   document.getElementById('level').textContent=Math.floor(score/5)+1;
+  document.getElementById('ammo').textContent=ammo;
+  const cd=SHOOT_COOLDOWN-(Date.now()-lastShot);
+  document.getElementById('cooldown').textContent=cd>0?`${(cd/1000).toFixed(1)}s`:'Ready';
 }
 
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // 2P STEP
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function step2p(){
   d1=nd1; d2=nd2;
-  const h1=movePt(s1[0],d1), h2=movePt(s2[0],d2);
-  const ate1=(h1.x===food.x&&h1.y===food.y)||(h1.x===food2.x&&h1.y===food2.y);
-  const ate2=(h2.x===food.x&&h2.y===food.y)||(h2.x===food2.x&&h2.y===food2.y);
-  const next1=ate1?[h1,...s1]:[h1,...s1.slice(0,-1)];
-  const next2=ate2?[h2,...s2]:[h2,...s2.slice(0,-1)];
-  const dw1=isWallDead2(h1),dw2=isWallDead2(h2);
+  const h1=moveWrap(s1[0],d1), h2=moveWrap(s2[0],d2);
+
+  const ate1=foods.findIndex(f=>f.x===h1.x&&f.y===h1.y);
+  const ate2=foods.findIndex(f=>f.x===h2.x&&f.y===h2.y);
+
+  // Death checks
+  const dw1=wallsOn&&(h1.x<0||h1.x>=COLS||h1.y<0||h1.y>=ROWS);
+  const dw2=wallsOn&&(h2.x<0||h2.x>=COLS||h2.y<0||h2.y>=ROWS);
   const ds1=s1.slice(0,-1).some(s=>s.x===h1.x&&s.y===h1.y);
   const ds2=s2.slice(0,-1).some(s=>s.x===h2.x&&s.y===h2.y);
   const do1=obstacles.some(o=>o.x===h1.x&&o.y===h1.y);
   const do2=obstacles.some(o=>o.x===h2.x&&o.y===h2.y);
   const headOn=h1.x===h2.x&&h1.y===h2.y;
-  const dh12=next2.slice(1).some(s=>s.x===h1.x&&s.y===h1.y);
-  const dh21=next1.slice(1).some(s=>s.x===h2.x&&s.y===h2.y);
-  const dead1=dw1||ds1||do1||dh12||(headOn&&!dh21);
-  const dead2=dw2||ds2||do2||dh21||(headOn&&!dh12);
+  const dh12=s2.slice(0,-1).some(s=>s.x===h1.x&&s.y===h1.y);
+  const dh21=s1.slice(0,-1).some(s=>s.x===h2.x&&s.y===h2.y);
+  let dead1=dw1||ds1||do1||dh12||(headOn&&!dh21);
+  let dead2=dw2||ds2||do2||dh21||(headOn&&!dh12);
+
+  if(!dead1){ s1.unshift(h1); if(ate1<0) s1.pop(); }
+  if(!dead2){ s2.unshift(h2); if(ate2<0) s2.pop(); }
+
+  if(ate1>=0&&!dead1){ ammo1++; playEat(); foods.splice(ate1,1); fillFoods([...s1,...s2]); }
+  if(ate2>=0&&!dead2){ ammo2++; playEat(); foods.splice(ate2<ate1&&ate1>=0?ate2:ate2,1); fillFoods([...s1,...s2]); }
+
+  // Bullets
+  const snakes=[s1,s2];
+  stepBullets(snakes);
+  if(!snakes[0]) dead1=true;
+  if(!snakes[1]) dead2=true;
+  if(snakes[0]) s1=snakes[0];
+  if(snakes[1]) s2=snakes[1];
+
   if(dead1||dead2){
     playDie();
     if(dead1&&dead2) endGame2p(0);
@@ -565,47 +508,47 @@ function step2p(){
     else{ p1wins++; endGame2p(1); }
     return;
   }
-  s1.unshift(h1); s2.unshift(h2);
-  let nf=null,nf2=null;
-  if(ate1){ playEat(false); nf=h1.x===food.x&&h1.y===food.y?'food':'food2'; }
-  if(ate2){ playEat(true);  nf2=h2.x===food.x&&h2.y===food.y?'food':'food2'; }
-  if(!ate1) s1.pop(); if(!ate2) s2.pop();
-  const all=[...s1,...s2];
-  if(ate1){ if(nf==='food') food=placeFood([...all,food2]); else food2=placeFood([...all,food]); }
-  if(ate2){ if(nf2==='food') food=placeFood([...all,food2]); else food2=placeFood([...all,food]); }
+
+  updateUI2p();
   draw();
 }
-function movePt(head,d){
-  let nx=head.x+d.x, ny=head.y+d.y;
-  if(!wallsOn){ nx=(nx+COLS)%COLS; ny=(ny+ROWS)%ROWS; }
-  return {x:nx,y:ny};
+
+function moveWrap(head,d){
+  let nx=head.x+d.x,ny=head.y+d.y;
+  if(!wallsOn){nx=(nx+COLS)%COLS;ny=(ny+ROWS)%ROWS;}
+  return{x:nx,y:ny};
 }
-function isWallDead2(h){ return wallsOn&&(h.x<0||h.x>=COLS||h.y<0||h.y>=ROWS); }
+
 function endGame2p(winner){
   clearInterval(gameLoop); running=false;
-  document.getElementById('p1score').textContent=p1wins;
-  document.getElementById('p2score').textContent=p2wins;
+  document.getElementById('p1wins').textContent=p1wins;
+  document.getElementById('p2wins').textContent=p2wins;
   const msg=winner===0?"💥 It's a DRAW!":winner===1?'🟢 Player 1 Wins!':'🔴 Player 2 Wins!';
   document.getElementById('msg').textContent=msg+' — Press Start or Space to play again.';
   flashCanvas(winner===1?'#4ecca3':winner===2?'#e94560':'#f5a623');
   if(winner>0) playWin();
 }
 
-// ══════════════════════════════════════════════════════
+function updateUI2p(){
+  document.getElementById('p1ammo').textContent=ammo1;
+  document.getElementById('p2ammo').textContent=ammo2;
+  document.getElementById('p1wins').textContent=p1wins;
+  document.getElementById('p2wins').textContent=p2wins;
+}
+
+// ══════════════════════════════════════════════════
 // DRAW
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function draw(){
-  const W=COLS*TILE, H=ROWS*TILE;
-  ctx.clearRect(0,0,W,H);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // Grid
   ctx.strokeStyle='rgba(255,255,255,0.04)';
-  for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*TILE,0);ctx.lineTo(i*TILE,H);ctx.stroke();}
-  for(let j=0;j<=ROWS;j++){ctx.beginPath();ctx.moveTo(0,j*TILE);ctx.lineTo(W,j*TILE);ctx.stroke();}
+  for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*TILE,0);ctx.lineTo(i*TILE,400);ctx.stroke();}
+  for(let j=0;j<=ROWS;j++){ctx.beginPath();ctx.moveTo(0,j*TILE);ctx.lineTo(400,j*TILE);ctx.stroke();}
 
   // Obstacles
-  const obs = (mode==='online') ? olObstacles : obstacles;
-  obs.forEach(o=>{
+  obstacles.forEach(o=>{
     ctx.fillStyle='#c0392b'; ctx.shadowBlur=6; ctx.shadowColor='#e94560';
     roundRect(o.x*TILE+1,o.y*TILE+1,TILE-2,TILE-2,3); ctx.shadowBlur=0;
     ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=1.5;
@@ -614,51 +557,62 @@ function draw(){
     ctx.lineWidth=1;
   });
 
-  // Food
+  // Food (5 pieces, pulsing)
   const pulse=0.5+0.5*Math.sin(Date.now()/200);
-  const fds = (mode==='online') ? olFoods : [food,food2];
-  const fcols=['#f5a623','#ff69b4','#4fc3f7','#81c784'];
-  fds.forEach((f,i)=>{
-    if(!f) return;
-    const col=fcols[i%fcols.length];
+  foods.forEach((f,i)=>{
+    const col=FOOD_COLORS[i%FOOD_COLORS.length];
     ctx.fillStyle=col; ctx.shadowBlur=10+8*pulse; ctx.shadowColor=col;
     ctx.beginPath(); ctx.arc(f.x*TILE+TILE/2,f.y*TILE+TILE/2,TILE/2-2+pulse,0,Math.PI*2); ctx.fill();
     ctx.shadowBlur=0;
   });
 
-  // Snakes
-  if(mode==='online'){
-    olSnakes.forEach(s=>{
-      if(!s||!s.alive) return;
-      drawSnake(s.body, s.dir, s.color, PLAYER_BODY_FN[s.id-1]);
+  // Bullets + trails
+  bullets.forEach(b=>{
+    // Trail
+    b.trail.forEach((t,i)=>{
+      const alpha=(i+1)/b.trail.length*0.5;
+      const col=b.owner===1?`rgba(78,204,163,${alpha})`:`rgba(233,69,96,${alpha})`;
+      ctx.fillStyle=col;
+      const sz=(i+1)/b.trail.length*(TILE*0.5);
+      ctx.beginPath(); ctx.arc(t.x*TILE+TILE/2,t.y*TILE+TILE/2,sz,0,Math.PI*2); ctx.fill();
     });
-  } else if(mode==='1p'){
-    drawSnake(snake, dir, '#4ecca3', PLAYER_BODY_FN[0]);
+    // Bullet head
+    const col=b.owner===1?'#4ecca3':'#e94560';
+    ctx.fillStyle=col; ctx.shadowBlur=14; ctx.shadowColor=col;
+    ctx.beginPath(); ctx.arc(b.x*TILE+TILE/2,b.y*TILE+TILE/2,TILE*0.38,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    // Inner bright core
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(b.x*TILE+TILE/2,b.y*TILE+TILE/2,TILE*0.15,0,Math.PI*2); ctx.fill();
+  });
+
+  // Snakes
+  if(mode==='1p'){
+    drawSnake(snake,dir,'#4ecca3',r=>`hsl(${160-r*40},70%,${55-r*15}%)`);
   } else {
-    drawSnake(s2, d2, '#e94560', PLAYER_BODY_FN[1]);
-    drawSnake(s1, d1, '#4ecca3', PLAYER_BODY_FN[0]);
+    drawSnake(s2,d2,'#e94560',r=>`hsl(${345+r*20},${70-r*20}%,${50-r*15}%)`);
+    drawSnake(s1,d1,'#4ecca3',r=>`hsl(${160-r*40},70%,${55-r*15}%)`);
   }
 
   // Wrap indicator
-  const wo = (mode==='online') ? (olSettings?.wallsOn ?? wallsOn) : wallsOn;
-  if(!wo){
+  if(!wallsOn){
     ctx.strokeStyle=`rgba(78,204,163,${0.2+0.1*Math.sin(Date.now()/300)})`;
-    ctx.lineWidth=4; ctx.strokeRect(2,2,W-4,H-4); ctx.lineWidth=1;
+    ctx.lineWidth=4; ctx.strokeRect(2,2,396,396); ctx.lineWidth=1;
   }
 }
 
-function drawSnake(body, d, color, bodyFn){
+function drawSnake(body,d,color,bodyFn){
   if(!body||body.length===0) return;
   body.forEach((seg,i)=>{
     const ratio=i/body.length;
-    ctx.fillStyle= i===0 ? color : (bodyFn ? bodyFn(ratio) : `hsl(160,70%,50%)`);
+    ctx.fillStyle=i===0?color:bodyFn(ratio);
     ctx.shadowBlur=i===0?12:0; ctx.shadowColor=color;
     roundRect(seg.x*TILE+1,seg.y*TILE+1,TILE-2,TILE-2,4);
     ctx.shadowBlur=0;
     if(i===0){
       ctx.fillStyle='#1a1a2e';
-      const cx=seg.x*TILE+TILE/2, cy=seg.y*TILE+TILE/2;
-      const ox=d.y*4, oy=d.x*4;
+      const cx=seg.x*TILE+TILE/2,cy=seg.y*TILE+TILE/2;
+      const ox=d.y*4,oy=d.x*4;
       ctx.beginPath();ctx.arc(cx+d.x*4+ox,cy+d.y*4+oy,2,0,Math.PI*2);ctx.fill();
       ctx.beginPath();ctx.arc(cx+d.x*4-ox,cy+d.y*4-oy,2,0,Math.PI*2);ctx.fill();
     }
@@ -676,390 +630,88 @@ function roundRect(x,y,w,h,r){
 
 function flashCanvas(col){
   let f=0;
-  const fl=setInterval(()=>{
-    ctx.fillStyle=`${col}${f%2===0?'44':'00'}`;
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    if(++f>5)clearInterval(fl);
-  },100);
+  const fl=setInterval(()=>{ ctx.fillStyle=`${col}${f%2===0?'44':'00'}`; ctx.fillRect(0,0,400,400); if(++f>5)clearInterval(fl); },100);
 }
-function showOverlay(title){
-  document.getElementById('overlay').style.display='flex';
-  document.getElementById('ov-title').textContent=title;
-}
+function showOverlay(title){ document.getElementById('overlay').style.display='flex'; document.getElementById('ov-title').textContent=title; }
 function hideOverlay(){ document.getElementById('overlay').style.display='none'; }
 
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // INPUT
-// ══════════════════════════════════════════════════════
-const DIRS={
+// ══════════════════════════════════════════════════
+const MOVE_DIRS={
   ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},
-  w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0},
-  i:{x:0,y:-1},k:{x:0,y:1},j:{x:-1,y:0},l:{x:1,y:0}
+  w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0}
 };
-const P1KEYS=new Set(['w','a','s','d']);
-const P2KEYS=new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight']);
-const P3KEYS=new Set(['i','j','k','l']);
-
 document.addEventListener('keydown',e=>{
-  if(mode==='online'){
-    const dv=DIRS[e.key];
-    if(dv){e.preventDefault(); olSendDir(dv);}
+  if(e.key===' '||e.key==='Enter'){
+    e.preventDefault();
+    if(!running){init();return;}
+    if(mode==='1p') tryShoot1p();
     return;
   }
-  if(e.key===' '){e.preventDefault();init();return;}
+  if(e.key.toLowerCase()==='f'&&mode==='1p'&&running){e.preventDefault();tryShoot1p();return;}
   if(mode==='2p'){
-    if(P1KEYS.has(e.key)){
-      const dv=DIRS[e.key];
+    if(['w','a','s','d'].includes(e.key)){
+      const dv=MOVE_DIRS[e.key];
       if(dv&&!(dv.x===-d1.x&&dv.y===-d1.y)){e.preventDefault();nd1=dv;}
     }
-    if(P2KEYS.has(e.key)){
-      const dv=DIRS[e.key];
+    if(e.key.toLowerCase()==='f'&&running){e.preventDefault();tryShoot(1);return;}
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+      const dv=MOVE_DIRS[e.key];
       if(dv&&!(dv.x===-d2.x&&dv.y===-d2.y)){e.preventDefault();nd2=dv;}
     }
-  } else {
-    const dv=DIRS[e.key];
-    if(dv&&!(dv.x===-dir.x&&dv.y===-dir.y)){e.preventDefault();nextDir=dv;}
+    if(e.key==='/'&&running){e.preventDefault();tryShoot(2);return;}
+    return;
   }
+  // 1P movement
+  const dv=MOVE_DIRS[e.key];
+  if(dv&&!(dv.x===-dir.x&&dv.y===-dir.y)){e.preventDefault();nextDir=dv;}
 });
 
 document.getElementById('startBtn').addEventListener('click',init);
 
-function bindDpad(id, getDv, guard){
-  document.getElementById(id).addEventListener('click',()=>{ if(running){ const d=getDv(); if(guard(d)) return; applyDv(d); }});
-}
-// 1P dpad
-[['btn-up',{x:0,y:-1}],['btn-down',{x:0,y:1}],['btn-left',{x:-1,y:0}],['btn-right',{x:1,y:0}]].forEach(([id,dv])=>{
+// D-pad 1P
+[['cbu',{x:0,y:-1}],['cbd',{x:0,y:1}],['cbl',{x:-1,y:0}],['cbr',{x:1,y:0}]].forEach(([id,dv])=>{
   document.getElementById(id).addEventListener('click',()=>{ if(running&&!(dv.x===-dir.x&&dv.y===-dir.y)) nextDir=dv; });
 });
-// 2P P1 dpad
-[['btn2p-up',{x:0,y:-1}],['btn2p-down',{x:0,y:1}],['btn2p-left',{x:-1,y:0}],['btn2p-right',{x:1,y:0}]].forEach(([id,dv])=>{
+document.getElementById('cbshoot').addEventListener('click',()=>{ if(running) tryShoot1p(); });
+
+// D-pad 2P P1
+[['cb2u',{x:0,y:-1}],['cb2d',{x:0,y:1}],['cb2l',{x:-1,y:0}],['cb2r',{x:1,y:0}]].forEach(([id,dv])=>{
   document.getElementById(id).addEventListener('click',()=>{ if(running&&!(dv.x===-d1.x&&dv.y===-d1.y)) nd1=dv; });
 });
-// 2P P2 dpad
-[['btn2p2-up',{x:0,y:-1}],['btn2p2-down',{x:0,y:1}],['btn2p2-left',{x:-1,y:0}],['btn2p2-right',{x:1,y:0}]].forEach(([id,dv])=>{
+document.getElementById('cb2shoot').addEventListener('click',()=>{ if(running) tryShoot(1); });
+
+// D-pad 2P P2
+[['cb3u',{x:0,y:-1}],['cb3d',{x:0,y:1}],['cb3l',{x:-1,y:0}],['cb3r',{x:1,y:0}]].forEach(([id,dv])=>{
   document.getElementById(id).addEventListener('click',()=>{ if(running&&!(dv.x===-d2.x&&dv.y===-d2.y)) nd2=dv; });
 });
-// Online dpad
-[['btnol-up',{x:0,y:-1}],['btnol-down',{x:0,y:1}],['btnol-left',{x:-1,y:0}],['btnol-right',{x:1,y:0}]].forEach(([id,dv])=>{
-  document.getElementById(id).addEventListener('click',()=>olSendDir(dv));
-});
+document.getElementById('cb3shoot').addEventListener('click',()=>{ if(running) tryShoot(2); });
 
-// Swipe
-let tx=0,ty=0;
-canvas.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+// Swipe to move, double-tap to shoot
+let tx=0,ty=0,lastTap=0;
+canvas.addEventListener('touchstart',e=>{
+  tx=e.touches[0].clientX; ty=e.touches[0].clientY;
+  const now=Date.now();
+  if(now-lastTap<300){ if(running&&mode==='1p') tryShoot1p(); }
+  lastTap=now;
+},{passive:true});
 canvas.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
-  if(Math.abs(dx)<5&&Math.abs(dy)<5) return;
+  const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)<8&&Math.abs(dy)<8) return;
   const dv=Math.abs(dx)>Math.abs(dy)?(dx>0?{x:1,y:0}:{x:-1,y:0}):(dy>0?{x:0,y:1}:{x:0,y:-1});
-  if(mode==='online') olSendDir(dv);
-  else if(mode==='1p'&&!(dv.x===-dir.x&&dv.y===-dir.y)) nextDir=dv;
+  if(mode==='1p'&&!(dv.x===-dir.x&&dv.y===-dir.y)) nextDir=dv;
 },{passive:true});
 
-// Idle animation
-function idleAnim(){ draw(); requestAnimationFrame(idleAnim); }
+// Idle animation + cooldown timer
+function idleAnim(){
+  draw();
+  if(running&&mode==='1p') updateUI1p();
+  requestAnimationFrame(idleAnim);
+}
 idleAnim();
-showOverlay('🐍 SNAKE');
+showOverlay('🐍 SNAKE SHOOTER');
 ctx.fillStyle='#0f3460'; ctx.fillRect(0,0,canvas.width,canvas.height);
-
-// ══════════════════════════════════════════════════════
-// ONLINE MULTIPLAYER
-// ══════════════════════════════════════════════════════
-let olWs=null, olPlayerNum=null, olRoomCode=null, olSettings=null, olConnected=1;
-let olSnakes=[], olFoods=[], olObstacles=[];
-
-function olSend(msg){
-  if(olWs&&olWs.readyState===WebSocket.OPEN) olWs.send(JSON.stringify(msg));
-}
-
-function olSendDir(dv){
-  if(!running) return;
-  olSend({type:'dir',d:dv});
-}
-
-function olSyncSettings(){
-  if(mode!=='online'||!olWs||olPlayerNum!==1||!olSettings||olSettings._gameRunning) return;
-  olSend({
-    type:'settings_update',
-    boardSize: document.getElementById('boardSel').value,
-    wallsOn, obstOn,
-    diff: document.getElementById('diffSel').value
-  });
-}
-
-function applySettingsFromServer(s){
-  wallsOn=s.wallsOn; obstOn=s.obstOn;
-  document.getElementById('diffSel').value=s.diff;
-  document.getElementById('boardSel').value=s.boardSize;
-  setToggleUI('wallsBtn',wallsOn);
-  setToggleUI('obstBtn',obstOn);
-  applyBoardSize(s.boardSize);
-}
-
-function olConnect(onOpen){
-  if(olWs&&olWs.readyState===WebSocket.OPEN){onOpen();return;}
-  const proto=location.protocol==='https:'?'wss:':'ws:';
-  olWs=new WebSocket(`${proto}//${location.host}`);
-  olWs.onopen=()=>onOpen();
-  olWs.onmessage=e=>{ try{ olHandleMsg(JSON.parse(e.data)); }catch(_){} };
-  olWs.onclose=()=>olHandleClose();
-  olWs.onerror=()=>olSetError('Connection failed. Please try again.');
-}
-
-function olHandleMsg(msg){
-  switch(msg.type){
-
-    case 'created':
-      olRoomCode=msg.code; olPlayerNum=1; olConnected=1;
-      olSettings={...msg.settings};
-      buildOnlineScoreboard(olSettings.maxPlayers);
-      olShowWaiting(msg.code, 1, olSettings.maxPlayers);
-      break;
-
-    case 'joined':
-      olRoomCode=msg.code; olPlayerNum=msg.player;
-      olConnected=msg.player; // rough estimate; player_joined will correct
-      olSettings={...msg.settings};
-      applySettingsFromServer(msg.settings);
-      buildOnlineScoreboard(olSettings.maxPlayers);
-      olShowWaiting(msg.code, msg.player, olSettings.maxPlayers);
-      document.getElementById('ol-status-text').textContent='Connected! Waiting for game to start…';
-      break;
-
-    case 'player_joined':
-      { const maxP=olSettings?.maxPlayers||2;
-        olConnected=msg.connected;
-        updateDots(olConnected, maxP);
-        document.getElementById('ol-status-text').textContent=`Player ${msg.player} joined!`;
-        if(olPlayerNum===1&&olConnected>=2){
-          document.getElementById('ol-start-btn').style.display='block';
-        }
-      }
-      break;
-
-    case 'settings_sync':
-      olSettings={...msg.settings};
-      if(olPlayerNum!==1) applySettingsFromServer(msg.settings);
-      break;
-
-    case 'countdown':
-      { const cdEl=document.getElementById('ol-countdown');
-        cdEl.style.display='block'; cdEl.textContent=msg.count; playBeep();
-        document.getElementById('ol-status-text').textContent='Get ready!';
-        document.getElementById('ol-start-btn').style.display='none';
-      }
-      break;
-
-    case 'state':
-      olSnakes=msg.snakes;
-      olFoods=msg.foods;
-      olObstacles=msg.obstacles||[];
-      if(!running){
-        running=true;
-        if(olSettings) olSettings._gameRunning=true;
-        hideOverlay();
-        document.getElementById('msg').textContent='';
-        olShowIngame();
-      }
-      break;
-
-    case 'end':
-      { running=false;
-        if(olSettings) olSettings._gameRunning=false;
-        // Update win counts
-        if(msg.wins) updateOnlineScoreboard(msg.wins);
-        const colors=['🟢','🔴','🟠','🟣'];
-        let txt;
-        if(msg.winner===0) txt="💥 It's a DRAW!";
-        else if(msg.winner===olPlayerNum) txt=`${colors[olPlayerNum-1]} You Win! 🎉`;
-        else txt=`${colors[msg.winner-1]} Player ${msg.winner} Wins!`;
-        document.getElementById('msg').textContent=txt;
-        flashCanvas(msg.winner===olPlayerNum?'#4ecca3':msg.winner>0?'#e94560':'#f5a623');
-        if(msg.winner===olPlayerNum) playWin(); else if(msg.winner>0) playDie();
-        // Show rematch
-        document.getElementById('ol-rematch-btn').style.display='block';
-        document.getElementById('ol-rematch-btn').disabled=false;
-        document.getElementById('ol-rematch-btn').textContent='🔄 Rematch';
-      }
-      break;
-
-    case 'restart_vote':
-      document.getElementById('msg').textContent=
-        `Rematch: ${msg.have}/${msg.need} votes. `+
-        (msg.from===olPlayerNum?'Your vote counted!':'Click Rematch to vote.');
-      break;
-
-    case 'player_left':
-      { const colors=['🟢','🔴','🟠','🟣'];
-        olConnected=Math.max(1,olConnected-1);
-        if(running){
-          document.getElementById('msg').textContent=`${colors[msg.player-1]} Player ${msg.player} disconnected.`;
-        } else {
-          document.getElementById('msg').textContent=`${colors[msg.player-1]} Player ${msg.player} left the room.`;
-          if(olSettings) updateDots(olConnected, olSettings.maxPlayers);
-          // Hide start button if dropped below 2
-          if(olPlayerNum===1&&olConnected<2){
-            document.getElementById('ol-start-btn').style.display='none';
-          }
-        }
-      }
-      break;
-
-    case 'disconnect':
-      running=false;
-      document.getElementById('msg').textContent='⚠️ Opponent disconnected.';
-      olReset();
-      olShowSetup();
-      showOverlay('🐍 ONLINE');
-      document.getElementById('ov-msg').textContent='Room closed. Create or join a new room.';
-      break;
-
-    case 'error':
-      olSetError(msg.msg||'Something went wrong.');
-      break;
-  }
-}
-
-function olHandleClose(){
-  if(mode!=='online') return;
-  running=false;
-  if(olRoomCode){
-    document.getElementById('msg').textContent='Connection lost.';
-    olShowSetup();
-    showOverlay('🐍 ONLINE');
-    document.getElementById('ov-msg').textContent='Create or join a room below';
-  }
-  olReset();
-}
-
-function olReset(){
-  olWs=null; olRoomCode=null; olPlayerNum=null; olSettings=null;
-  olSnakes=[]; olFoods=[]; olObstacles=[];
-  running=false;
-}
-
-function olDisconnect(){
-  if(olWs){ olWs.close(); olWs=null; }
-  olReset();
-}
-
-// ── Online UI ──────────────────────────────────────────
-function olShowSetup(){
-  document.getElementById('ol-setup').style.display='flex';
-  document.getElementById('ol-waiting').style.display='none';
-  document.getElementById('ol-ingame').style.display='none';
-  document.getElementById('ol-error').textContent='';
-  document.getElementById('ol-code-in').value='';
-}
-
-function olShowWaiting(code, connected, maxP){
-  document.getElementById('ol-setup').style.display='none';
-  document.getElementById('ol-waiting').style.display='flex';
-  document.getElementById('ol-ingame').style.display='none';
-  document.getElementById('ol-code-display').textContent=code;
-  document.getElementById('ol-countdown').style.display='none';
-  document.getElementById('ol-status-text').textContent='Waiting for players…';
-  document.getElementById('ol-start-btn').style.display='none';
-  updateDots(connected, maxP);
-}
-
-function olShowIngame(){
-  document.getElementById('ol-setup').style.display='none';
-  document.getElementById('ol-waiting').style.display='none';
-  document.getElementById('ol-ingame').style.display='flex';
-  document.getElementById('ol-code-ingame').textContent=olRoomCode||'';
-  const pColors=['🟢','🔴','🟠','🟣'];
-  document.getElementById('ol-player-label').textContent=
-    `${pColors[olPlayerNum-1]} You are P${olPlayerNum}`;
-  document.getElementById('ol-dpad-label').textContent=
-    `${pColors[olPlayerNum-1]} Your controls (P${olPlayerNum})`;
-  document.getElementById('ol-rematch-btn').style.display='none';
-  document.getElementById('sb-online').style.display='flex';
-}
-
-function olSetError(txt){ document.getElementById('ol-error').textContent=txt; }
-
-function updateDots(connected, maxP){
-  document.getElementById('ol-dots').innerHTML=
-    Array.from({length:maxP},(_,i)=>
-      `<span style="font-size:1.2rem;color:${i<connected?PLAYER_COLORS[i]:'#333'}">●</span>`
-    ).join('');
-  document.getElementById('ol-connected-text').textContent=`${connected}/${maxP} connected`;
-}
-
-function buildOnlineScoreboard(n){
-  const bgs=['#1e3a5f','#3a1e2e','#2e2a1e','#2a1e3a'];
-  const sb=document.getElementById('sb-online');
-  sb.innerHTML='';
-  for(let i=0;i<n;i++){
-    const b=document.createElement('div');
-    b.className='ol-score-badge';
-    b.id=`olbadge-${i+1}`;
-    b.style.cssText=`background:${bgs[i]};border:2px solid ${PLAYER_COLORS[i]};`;
-    const lbl=(i+1===olPlayerNum)?`🎮 You`:`P${i+1}`;
-    b.innerHTML=`<div style="color:${PLAYER_COLORS[i]};font-weight:bold;font-size:.82rem">${lbl}</div><div class="pts" id="olwins-${i+1}" style="color:${PLAYER_COLORS[i]}">0</div><div style="font-size:.68rem;color:#aaa">wins</div>`;
-    sb.appendChild(b);
-  }
-}
-
-function updateOnlineScoreboard(wins){
-  wins.forEach((w,i)=>{
-    const el=document.getElementById(`olwins-${i+1}`);
-    if(el) el.textContent=w;
-  });
-}
-
-// ── Online button handlers ─────────────────────────────
-document.getElementById('ol-create-btn').addEventListener('click',()=>{
-  olSetError('');
-  olConnect(()=>{
-    olSend({
-      type:'create',
-      maxPlayers: parseInt(document.getElementById('ol-max-players').value)||2,
-      boardSize: document.getElementById('boardSel').value,
-      wallsOn, obstOn,
-      diff: document.getElementById('diffSel').value
-    });
-  });
-});
-
-document.getElementById('ol-join-btn').addEventListener('click',()=>{
-  const code=document.getElementById('ol-code-in').value.trim().toUpperCase();
-  if(code.length<4){olSetError('Enter a 4-character room code.');return;}
-  olSetError('');
-  olConnect(()=>olSend({type:'join',code}));
-});
-
-document.getElementById('ol-code-in').addEventListener('keydown',e=>{
-  if(e.key==='Enter') document.getElementById('ol-join-btn').click();
-});
-
-document.getElementById('ol-start-btn').addEventListener('click',()=>{
-  olSend({type:'start_game'});
-  document.getElementById('ol-start-btn').style.display='none';
-  document.getElementById('ol-status-text').textContent='Starting…';
-});
-
-document.getElementById('ol-cancel-btn').addEventListener('click',()=>{
-  olDisconnect();
-  olShowSetup();
-  showOverlay('🐍 ONLINE');
-  document.getElementById('ov-msg').textContent='Create or join a room below';
-});
-
-document.getElementById('ol-leave-btn').addEventListener('click',()=>{
-  olDisconnect();
-  olShowSetup();
-  showOverlay('🐍 ONLINE');
-  document.getElementById('ov-msg').textContent='Create or join a room below';
-  document.getElementById('msg').textContent='';
-  document.getElementById('sb-online').style.display='none';
-});
-
-document.getElementById('ol-rematch-btn').addEventListener('click',function(){
-  this.disabled=true;
-  this.textContent='Waiting for others…';
-  olSend({type:'restart'});
-});
 </script>
 </body>
 </html>
